@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option  go_package ="github.com/NithishNithi/GoShop";
+
+package GoShop;
+
+service GoShopService {
+    rpc RegisterCustomer (CustomerDetails) returns (CustomerResponse);
+}
+
+message CustomerDetails {
+    string Email = 1;
+    string FullName = 2;
+    string Password = 3;
+    string Address
+}
