@@ -1,3 +1,4 @@
 package constants
 
-const ConnectionString = ""
+const ConnectionString = "mongodb+srv://mrnithisht:mrnithisht@banking.taaq05t.mongodb.net/"
+const Port = ":5000"

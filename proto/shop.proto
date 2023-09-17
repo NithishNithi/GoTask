@@ -1,16 +1,33 @@
 syntax = "proto3";
 
-option  go_package ="github.com/NithishNithi/GoShop";
+package goshop;
 
-package GoShop;
+option go_package = "github.com/NithishNithi/GoShop";
 
 service GoShopService {
-    rpc RegisterCustomer (CustomerDetails) returns (CustomerResponse);
+    rpc CreateCustomer (CustomerDetails) returns (CustomerResponse);
 }
 
 message CustomerDetails {
-    string Email = 1;
-    string FullName = 2;
-    string Password = 3;
-    string Address
+    string CustomerId = 1;
+    string email = 2;
+    string full_name = 3;
+    string password = 4;
+    string date_of_birth = 5;
+    string phone_number = 6;
+    repeated Address address = 7;
+}
+
+message Address {
+    string country = 1;
+    string street = 2;
+    string city = 3;
+    string state = 4;
+    string zip = 5;
+}
+
+message CustomerResponse {
+   string CustomerId = 1;
+    bool success = 2;
+    string message = 3;
 }
