@@ -24,13 +24,13 @@ import (
 	"log"
 	"sync"
 
-	pb "github.com/NithishNithi/GoShop/proto"
+	pb "github.com/NithishNithi/GoTask/proto"
 	"google.golang.org/grpc"
 )
 
 var once sync.Once
 
-type GrpcClient pb.GoShopServiceClient
+type GrpcClient pb.GoTaskServiceClient
 
 var (
 	instance GrpcClient
@@ -45,7 +45,7 @@ func GetGrpcClientInstance() (GrpcClient,*grpc.ClientConn) {
 		}
 		//defer conn.Close()
 
-		instance = pb.NewGoShopServiceClient(conn)
+		instance = pb.NewGoTaskServiceClient(conn)
 	})
 
 	return instance,conn

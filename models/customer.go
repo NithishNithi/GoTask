@@ -21,3 +21,22 @@ type Address struct {
 type CustomerResponse struct {
 	CustomerId string `json:"customerid" bson:"customerid"`
 }
+
+// -----------
+
+type Login struct {
+	CustomerId string `json:"customerid" bson:"customerid"`
+	Email      string `json:"email" bson:"email"`
+	Password   string `json:"password" bson:"password"`
+}
+
+type Token struct {
+	CustomerId string `json:"customerid" bson:"customerid"`
+	Email      string `json:"email" bson:"email"`
+	Token      string 	`json:"token" bson:"token"`
+}
+type TokenResponse struct {
+	Token string `json:"token" bson:"token"`
+}
+
+

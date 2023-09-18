@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/NithishNithi/GoShop/constants"
+	"github.com/NithishNithi/GoTask/constants"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"

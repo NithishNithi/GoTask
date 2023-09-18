@@ -3,8 +3,8 @@ package controllers
 import (
 	"context"
 
-	"github.com/NithishNithi/GoShop/models"
-	pro "github.com/NithishNithi/GoShop/proto"
+	"github.com/NithishNithi/GoTask/models"
+	pro "github.com/NithishNithi/GoTask/proto"
 )
 
 func (s *RPCServer) CreateCustomer(ctx context.Context, req *pro.CustomerDetails) (*pro.CustomerResponse, error) {
@@ -23,7 +23,7 @@ func (s *RPCServer) CreateCustomer(ctx context.Context, req *pro.CustomerDetails
 		FullName: req.FullName,
 		Email: req.Email,
 		Password: req.Password,
-		DateofBirth: req.DateOfBirth,
+		DateofBirth: req.DateofBirth,
 		PhoneNumber: req.PhoneNumber,
 		Address: []*models.Address{&address},
 	}
@@ -35,8 +35,22 @@ func (s *RPCServer) CreateCustomer(ctx context.Context, req *pro.CustomerDetails
 		responseCustomer := &pro.CustomerResponse{
 			CustomerId: result.CustomerId,
 			Success: true,
-			Message: "Welcome to GoShop Your Account has Been Created",
+			Message: "Welcome to GoTask Scheduler, Your Account has Been Created",
 		}
 		return responseCustomer, nil
+	}
+}
+
+func (s *RPCServer) InsertToken(ctx context.Context, req *pro.Token) (*pro.TokenResponse, error) {
+	dbCustomer := models.Token{Email: req.Email, Token: req.Token, CustomerId: req.CustomerId}
+	result, err := CustomerService.InsertToken(&dbCustomer)
+	if err != nil {
+		return nil, err
+	} else {
+
+		responsetoken:=&pro.TokenResponse{
+			Token: result.Token,
+		}
+		return responsetoken,nil
 	}
 }

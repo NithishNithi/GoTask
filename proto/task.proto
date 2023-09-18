@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package GoTask;
+
+option go_package = "github.com/NithishNithi/GoTask";
+
+service GoTaskService {
+    rpc CreateCustomer (CustomerDetails) returns (CustomerResponse);
+    rpc InsertToken (Token) returns (TokenResponse);
+}
+
+message CustomerDetails {
+    string CustomerId = 1;
+    string Email = 2;
+    string FullName = 3;
+    string Password = 4;
+    string DateofBirth = 5;
+    string PhoneNumber = 6;
+    repeated Address address = 7;
+}
+
+message Address {
+    string Country = 1;
+    string Street = 2;
+    string City = 3;
+    string State = 4;
+    string Zip = 5;
+}
+
+message CustomerResponse {
+    string CustomerId = 1;
+    bool Success = 2;
+    string Message = 3;
+}
+
+message Token {
+    string CustomerId = 1;
+    string Email = 2;
+    string Token = 3;
+}
+message TokenResponse {
+    string Token = 1;
+}
+
+message Empty {
+}
+

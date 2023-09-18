@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/NithishNithi/GoShop/constants"
-	"github.com/NithishNithi/GoShop/controllers"
-	"github.com/NithishNithi/GoShop/database"
-	pro "github.com/NithishNithi/GoShop/proto"
-	"github.com/NithishNithi/GoShop/services"
+	"github.com/NithishNithi/GoTask/constants"
+	"github.com/NithishNithi/GoTask/controllers"
+	"github.com/NithishNithi/GoTask/database"
+	pro "github.com/NithishNithi/GoTask/proto"
+	"github.com/NithishNithi/GoTask/services"
 	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -17,8 +17,9 @@ import (
 )
 
 func initDatabase(client *mongo.Client) {
-	CustomerCollection := database.GetCollection(client, "GoShop", "CustomerProfile")
-	controllers.CustomerService = services.InitCustomerService(CustomerCollection, context.Background())
+	CustomerCollection := database.GetCollection(client, "GoTask", "CustomerProfile")
+	TokenCollection:=database.GetCollection(client,"GoTask","Tokens")
+	controllers.CustomerService = services.InitCustomerService(CustomerCollection,TokenCollection, context.Background())
 
 }
 
@@ -39,7 +40,7 @@ func main() {
 	s := grpc.NewServer()
 	healthServer := health.NewServer()
 	grpc_health_v1.RegisterHealthServer(s, healthServer)
-	pro.RegisterGoShopServiceServer(s, &controllers.RPCServer{})
+	pro.RegisterGoTaskServiceServer(s, &controllers.RPCServer{})
 	fmt.Println("Server listening on", constants.Port)
 	if err := s.Serve(lis); err != nil {
 		fmt.Printf("Failed to serve: %v", err)

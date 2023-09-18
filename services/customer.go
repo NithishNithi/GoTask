@@ -1,10 +1,12 @@
 package services
 
 import (
+	"context"
 	"errors"
 	"log"
 
-	"github.com/NithishNithi/GoShop/models"
+	"github.com/NithishNithi/GoTask/database"
+	"github.com/NithishNithi/GoTask/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -21,7 +23,7 @@ func (p *CustomerService) CreateCustomer(user *models.Customer) (*models.Custome
 	existingCustomer := &models.Customer{}
 	err := p.CustomerCollection.FindOne(p.ctx, filter).Decode(existingCustomer)
 	if err == nil {
-		return nil, errors.New("Customer with the same customerId or email already exists")
+		return nil, errors.New("customer with the same customerId or email already exists")
 	} else if err != mongo.ErrNoDocuments {
 		return nil, err
 	}
@@ -42,6 +44,45 @@ func (p *CustomerService) CreateCustomer(user *models.Customer) (*models.Custome
 
 	response := &models.CustomerResponse{
 		CustomerId: newCustomer.CustomerId,
+	}
+	return response, nil
+}
+
+func IsValidUser(user *models.Login) bool {
+
+	mongoclient, _ := database.ConnectDatabase()
+	collection := mongoclient.Database("GoTask").Collection("CustomerProfile")
+
+	query := bson.M{"email": user.Email}
+
+	var customer models.Customer
+
+	err := collection.FindOne(context.TODO(), query).Decode(&customer)
+	if err != nil {
+		return false
+	}
+	if user.CustomerId != customer.CustomerId {
+		return false
+	}
+	if customer.Password != user.Password {
+		return false
+	}
+	return true
+}
+
+func (p *CustomerService) InsertToken(user *models.Token) (*models.TokenResponse, error) {
+	result, err := p.TokenCollection.InsertOne(p.ctx, &user)
+	if err != nil {
+		return nil, err
+	}
+	var newUser models.Token
+	query := bson.M{"_id": result.InsertedID}
+	err = p.TokenCollection.FindOne(p.ctx, query).Decode(&newUser)
+	if err != nil {
+		return nil, err
+	}
+	response := &models.TokenResponse{
+		Token: newUser.Token,
 	}
 	return response, nil
 }

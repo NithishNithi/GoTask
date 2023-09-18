@@ -1,13 +1,13 @@
 package controllers
 
 import (
-	"github.com/NithishNithi/GoShop/interfaces"
+	"github.com/NithishNithi/GoTask/interfaces"
+	pro "github.com/NithishNithi/GoTask/proto"
 	"github.com/gin-gonic/gin"
-	pro "github.com/NithishNithi/GoShop/proto"
 )
 
 type RPCServer struct {
-	pro.UnimplementedGoShopServiceServer
+	pro.UnimplementedGoTaskServiceServer
 }
 
 var (
