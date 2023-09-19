@@ -19,7 +19,8 @@ import (
 func initDatabase(client *mongo.Client) {
 	CustomerCollection := database.GetCollection(client, "GoTask", "CustomerProfile")
 	TokenCollection:=database.GetCollection(client,"GoTask","Tokens")
-	controllers.CustomerService = services.InitCustomerService(CustomerCollection,TokenCollection, context.Background())
+	TaskCollection := database.GetCollection(client,"GoTask","TaskManagement")
+	controllers.CustomerService = services.InitCustomerService(CustomerCollection,TokenCollection,TaskCollection,context.Background())
 
 }
 

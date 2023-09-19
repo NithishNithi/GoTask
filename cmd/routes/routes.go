@@ -14,6 +14,6 @@ func SetUpRoutes(r *gin.Engine) {
 
 	task := r.Group("/tasks")
 	{
-		task.POST("/createtask",)
+		task.POST("/createtask",handlers.CreateTask)
 	}
 }

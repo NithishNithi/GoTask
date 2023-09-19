@@ -7,8 +7,10 @@ option go_package = "github.com/NithishNithi/GoTask";
 service GoTaskService {
     rpc CreateCustomer (CustomerDetails) returns (CustomerResponse);
     rpc InsertToken (Token) returns (TokenResponse);
+    // ------>
+    rpc CreateTask(TaskDetails)returns(TaskResponse);
 }
-
+// --------->
 message CustomerDetails {
     string CustomerId = 1;
     string Email = 2;
@@ -33,6 +35,10 @@ message CustomerResponse {
     string Message = 3;
 }
 
+
+// ------------>
+
+
 message Token {
     string CustomerId = 1;
     string Email = 2;
@@ -43,5 +49,28 @@ message TokenResponse {
 }
 
 message Empty {
+}
+
+
+// ----------->
+
+
+message TaskDetails {
+    string TaskId = 1;
+    string CustomerId = 2;
+    string Title = 3;
+    string Description = 4;
+    string DueDate = 5;
+    string Priority = 6;
+    string Category = 7;
+    string CreatedAt = 8;
+    string UpdatedAt = 9;
+    bool   Completed = 10;
+}
+
+message TaskResponse {
+    string TaskId = 1;
+    string Title = 2;
+    string DueDate = 3;
 }
 
