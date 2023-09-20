@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type Task struct {
 	TaskId        string   `json:"taskid" bson:"taskid"`
 	CustomerId    string   `json:"customerid" bson:"customerid"`
@@ -16,8 +14,8 @@ type Task struct {
 }
 
 type Update struct {
-	UpdatedAt time.Time `json:"updated_at"`
-	Changes   string    `json:"changes"`
+	UpdatedAt string `json:"updatedat"`
+	Changes   string `json:"changes"`
 }
 
 type EditTaskDetails struct {

@@ -43,7 +43,7 @@ func (p *CustomerService) EditTask(user *models.EditTaskDetails) (*models.Task, 
 
     // Create a new update record
     newUpdate := models.Update{
-        UpdatedAt: time.Now(),
+        UpdatedAt: time.Now().Format(time.RFC850),
         Changes:   fmt.Sprintf("Field '%s' updated to '%s'", user.Field, user.Value),
     }
 

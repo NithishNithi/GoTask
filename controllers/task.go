@@ -53,16 +53,14 @@ func (s *RPCServer) EditTask(ctx context.Context, req *pro.EditTaskDetails) (*pr
 		Value:      req.Value,
 	}
 	result, err := CustomerService.EditTask(&dbtask)
-
 	if err != nil {
 		return nil, err
 	} else {
 		responsetask := &pro.TaskResponse{
 			TaskId:  result.TaskId,
 			Title:   result.Title,
-			DueDate: result.TaskId,
+			DueDate: result.DueDate,
 		}
 		return responsetask, nil
-
 	}
 }
