@@ -25,7 +25,7 @@ func (s *RPCServer) CreateCustomer(ctx context.Context, req *pro.CustomerDetails
 		Password: req.Password,
 		DateofBirth: req.DateofBirth,
 		PhoneNumber: req.PhoneNumber,
-		Address: []*models.Address{&address},
+		Address: []models.Address{address},
 	}
 
 	result,err:=CustomerService.CreateCustomer(&dbCustomer)

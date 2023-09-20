@@ -11,12 +11,18 @@ type Task struct {
 	Priority      string   `json:"priority" bson:"priority"`
 	Category      string   `json:"category" bson:"category"`
 	CreatedAt     string   `json:"createdat" bson:"createdat"`
-	UpdatedAt     string   `json:"updatedat" bson:"updatedat"`
 	Completed     bool     `json:"completed" bson:"completed"`
-	UpdateHistroy []Update `json:"updatehistroy" bson:"updatehistroy"`
+	UpdateHistory []Update `json:"updatehistory" bson:"updatehistory"`
 }
 
 type Update struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	Changes   string    `json:"changes"`
+}
+
+type EditTaskDetails struct {
+	TaskId     string `json:"taskid" bson:"taskid"`
+	CustomerId string `json:"customerid" bson:"customerid"`
+	Field      string `json:"field"`
+	Value      string `json:"value"`
 }

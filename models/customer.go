@@ -7,7 +7,7 @@ type Customer struct {
 	Password    string     `json:"password" bson:"password"`
 	DateofBirth string     `json:"dateofbirth" bson:"dateofbirth"`
 	PhoneNumber string     `json:"phonenumber" bson:"phonenumber"`
-	Address     []*Address `json:"address" bson:"address"`
+	Address     []Address `json:"address" bson:"address"`
 }
 
 type Address struct {

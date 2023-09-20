@@ -9,6 +9,7 @@ service GoTaskService {
     rpc InsertToken (Token) returns (TokenResponse);
     // ------>
     rpc CreateTask(TaskDetails)returns(TaskResponse);
+    rpc EditTask(EditTaskDetails)returns(TaskResponse);
 }
 // --------->
 message CustomerDetails {
@@ -64,13 +65,19 @@ message TaskDetails {
     string Priority = 6;
     string Category = 7;
     string CreatedAt = 8;
-    string UpdatedAt = 9;
-    bool   Completed = 10;
+    bool   Completed = 9;
 }
 
 message TaskResponse {
     string TaskId = 1;
     string Title = 2;
     string DueDate = 3;
+}
+
+message EditTaskDetails {
+    string CustomerId =1;
+    string TaskId = 2;
+    string Field = 3;
+    string Value=5;  
 }
 

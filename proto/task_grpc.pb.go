@@ -26,6 +26,7 @@ type GoTaskServiceClient interface {
 	InsertToken(ctx context.Context, in *Token, opts ...grpc.CallOption) (*TokenResponse, error)
 	// ------>
 	CreateTask(ctx context.Context, in *TaskDetails, opts ...grpc.CallOption) (*TaskResponse, error)
+	EditTask(ctx context.Context, in *EditTaskDetails, opts ...grpc.CallOption) (*TaskResponse, error)
 }
 
 type goTaskServiceClient struct {
@@ -63,6 +64,15 @@ func (c *goTaskServiceClient) CreateTask(ctx context.Context, in *TaskDetails, o
 	return out, nil
 }
 
+func (c *goTaskServiceClient) EditTask(ctx context.Context, in *EditTaskDetails, opts ...grpc.CallOption) (*TaskResponse, error) {
+	out := new(TaskResponse)
+	err := c.cc.Invoke(ctx, "/GoTask.GoTaskService/EditTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GoTaskServiceServer is the server API for GoTaskService service.
 // All implementations must embed UnimplementedGoTaskServiceServer
 // for forward compatibility
@@ -71,6 +81,7 @@ type GoTaskServiceServer interface {
 	InsertToken(context.Context, *Token) (*TokenResponse, error)
 	// ------>
 	CreateTask(context.Context, *TaskDetails) (*TaskResponse, error)
+	EditTask(context.Context, *EditTaskDetails) (*TaskResponse, error)
 	mustEmbedUnimplementedGoTaskServiceServer()
 }
 
@@ -86,6 +97,9 @@ func (UnimplementedGoTaskServiceServer) InsertToken(context.Context, *Token) (*T
 }
 func (UnimplementedGoTaskServiceServer) CreateTask(context.Context, *TaskDetails) (*TaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateTask not implemented")
+}
+func (UnimplementedGoTaskServiceServer) EditTask(context.Context, *EditTaskDetails) (*TaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EditTask not implemented")
 }
 func (UnimplementedGoTaskServiceServer) mustEmbedUnimplementedGoTaskServiceServer() {}
 
@@ -154,6 +168,24 @@ func _GoTaskService_CreateTask_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GoTaskService_EditTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EditTaskDetails)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoTaskServiceServer).EditTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/GoTask.GoTaskService/EditTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoTaskServiceServer).EditTask(ctx, req.(*EditTaskDetails))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GoTaskService_ServiceDesc is the grpc.ServiceDesc for GoTaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -172,6 +204,10 @@ var GoTaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateTask",
 			Handler:    _GoTaskService_CreateTask_Handler,
+		},
+		{
+			MethodName: "EditTask",
+			Handler:    _GoTaskService_EditTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
