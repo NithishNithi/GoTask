@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/NithishNithi/GoTask/constants"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 func CreateToken(email, customerid string) (string, error) {
