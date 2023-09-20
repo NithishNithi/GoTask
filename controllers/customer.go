@@ -18,24 +18,24 @@ func (s *RPCServer) CreateCustomer(ctx context.Context, req *pro.CustomerDetails
 			Zip:     req.Address[0].Zip,
 		}
 	}
-	dbCustomer:=models.Customer{
-		CustomerId: req.CustomerId,
-		FullName: req.FullName,
-		Email: req.Email,
-		Password: req.Password,
+	dbCustomer := models.Customer{
+		CustomerId:  req.CustomerId,
+		FullName:    req.FullName,
+		Email:       req.Email,
+		Password:    req.Password,
 		DateofBirth: req.DateofBirth,
 		PhoneNumber: req.PhoneNumber,
-		Address: []models.Address{address},
+		Address:     []models.Address{address},
 	}
 
-	result,err:=CustomerService.CreateCustomer(&dbCustomer)
+	result, err := CustomerService.CreateCustomer(&dbCustomer)
 	if err != nil {
 		return nil, err
 	} else {
 		responseCustomer := &pro.CustomerResponse{
 			CustomerId: result.CustomerId,
-			Success: true,
-			Message: "Welcome to GoTask Scheduler, Your Account has Been Created",
+			Success:    true,
+			Message:    "Welcome to GoTask Scheduler, Your Account has Been Created",
 		}
 		return responseCustomer, nil
 	}
@@ -48,9 +48,9 @@ func (s *RPCServer) InsertToken(ctx context.Context, req *pro.Token) (*pro.Token
 		return nil, err
 	} else {
 
-		responsetoken:=&pro.TokenResponse{
+		responsetoken := &pro.TokenResponse{
 			Token: result.Token,
 		}
-		return responsetoken,nil
+		return responsetoken, nil
 	}
 }

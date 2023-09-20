@@ -35,7 +35,6 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": response})
-
 }
 
 func EditTask(c *gin.Context) {
@@ -50,24 +49,19 @@ func EditTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
 	var request *models.EditTaskDetails
 	err1 := c.ShouldBindJSON(&request)
 	if err1 != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err1.Error()})
 		return
 	}
-
 	Client, _ := grpcclient.GetGrpcClientInstance()
 	response, err2 := Client.EditTask(c.Request.Context(), &pb.EditTaskDetails{CustomerId: Customerid, TaskId: taskid, Field: request.Field, Value: request.Value})
-
 	if err2 != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err2.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, gin.H{"message": response})
-
 }
 
 func DeleteTask(c *gin.Context) {
@@ -89,5 +83,26 @@ func DeleteTask(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, gin.H{"message": "Task Deleted"})
 	}
+}
+
+func GetbyTaskId(c *gin.Context) {
+	taskid := c.Param("taskid")
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
+		return
+	}
+	customerid, err := services.ExtractCustomerID(token, constants.SecretKey)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
+		return
+	}
+	Client, _ := grpcclient.GetGrpcClientInstance()
+	response, err2 := Client.GetTaskbyId(c.Request.Context(), &pb.TaskDelete{TaskId: taskid, CustomerId: customerid})
+	if err2 != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err2})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": response})
 
 }

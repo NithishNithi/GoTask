@@ -8,4 +8,5 @@ type Customer interface {
 	CreateTask(Task *models.Task) (*models.Task, error)
 	EditTask(Task *models.EditTaskDetails) (*models.Task, error)
 	DeleteTask(Task *models.EditTaskDetails)(error)
+	GetbyTaskId(Task *models.EditTaskDetails)(*models.Task,error)
 }

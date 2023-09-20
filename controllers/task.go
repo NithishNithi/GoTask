@@ -23,7 +23,6 @@ func (s *RPCServer) CreateTask(ctx context.Context, req *pro.TaskDetails) (*pro.
 		Completed:   req.Completed,
 	}
 	result, err := CustomerService.CreateTask(&dbtask)
-
 	if err != nil {
 		return nil, err
 	} else {
@@ -34,7 +33,6 @@ func (s *RPCServer) CreateTask(ctx context.Context, req *pro.TaskDetails) (*pro.
 		}
 		return responsetask, nil
 	}
-
 }
 
 func (s *RPCServer) EditTask(ctx context.Context, req *pro.EditTaskDetails) (*pro.TaskResponse, error) {
@@ -78,4 +76,31 @@ func (s *RPCServer) DeleteTask(ctx context.Context, req *pro.TaskDelete) (*pro.E
 		return nil, err
 	}
 	return &pro.Empty{}, nil
+}
+
+func (s *RPCServer) GetTaskbyId(ctx context.Context, req *pro.TaskDelete) (*pro.TaskDetails, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
+	}
+	dbgettask := models.EditTaskDetails{
+		TaskId:     req.TaskId,
+		CustomerId: req.CustomerId,
+	}
+	result, err := CustomerService.GetbyTaskId(&dbgettask)
+	if err != nil {
+		return nil, err
+	} else {
+		responsetask := &pro.TaskDetails{
+			TaskId:      result.TaskId,
+			CustomerId:  result.CustomerId,
+			Title:       result.Title,
+			Description: result.Description,
+			DueDate:     result.DueDate,
+			Priority:    result.Priority,
+			Category:    result.Category,
+			CreatedAt:   result.CreatedAt,
+			Completed:   result.Completed,
+		}
+		return responsetask, nil
+	}
 }
