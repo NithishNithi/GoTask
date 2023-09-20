@@ -69,3 +69,25 @@ func EditTask(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": response})
 
 }
+
+func DeleteTask(c *gin.Context) {
+	taskid := c.Param("taskid")
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
+		return
+	}
+	customerid, err := services.ExtractCustomerID(token, constants.SecretKey)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
+		return
+	}
+	Client, _ := grpcclient.GetGrpcClientInstance()
+	_, err2 := Client.DeleteTask(c.Request.Context(), &pb.TaskDelete{TaskId: taskid, CustomerId: customerid})
+	if err2 != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err2.Error()})
+	} else {
+		c.JSON(http.StatusOK, gin.H{"message": "Task Deleted"})
+	}
+
+}

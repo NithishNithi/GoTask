@@ -64,3 +64,18 @@ func (s *RPCServer) EditTask(ctx context.Context, req *pro.EditTaskDetails) (*pr
 		return responsetask, nil
 	}
 }
+
+func (s *RPCServer) DeleteTask(ctx context.Context, req *pro.TaskDelete) (*pro.Empty, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
+	}
+	dbdelete := models.EditTaskDetails{
+		TaskId:     req.TaskId,
+		CustomerId: req.CustomerId,
+	}
+	err := CustomerService.DeleteTask(&dbdelete)
+	if err != nil {
+		return nil, err
+	}
+	return &pro.Empty{}, nil
+}

@@ -10,6 +10,8 @@ service GoTaskService {
     // ------>
     rpc CreateTask(TaskDetails)returns(TaskResponse);
     rpc EditTask(EditTaskDetails)returns(TaskResponse);
+    rpc DeleteTask(TaskDelete)returns(Empty);
+    rpc GetTaskbyId(TaskDelete)returns(TaskDetails);
 }
 // --------->
 message CustomerDetails {
@@ -79,5 +81,10 @@ message EditTaskDetails {
     string TaskId = 2;
     string Field = 3;
     string Value=5;  
+}
+
+message TaskDelete{
+    string TaskId = 1;
+    string CustomerId =2;
 }
 

@@ -41,7 +41,7 @@ func LoginCustomer(c *gin.Context) {
 			return
 		}
 		Client, _ := grpcclient.GetGrpcClientInstance()
-		response,err1:=Client.InsertToken(c.Request.Context(), &pb.Token{ CustomerId: request.CustomerId,Email: request.Email, Token: token})
+		response, err1 := Client.InsertToken(c.Request.Context(), &pb.Token{CustomerId: request.CustomerId, Email: request.Email, Token: token})
 		if err1 != nil {
 			log.Fatal(err1)
 		}

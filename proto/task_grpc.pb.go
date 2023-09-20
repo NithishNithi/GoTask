@@ -27,6 +27,8 @@ type GoTaskServiceClient interface {
 	// ------>
 	CreateTask(ctx context.Context, in *TaskDetails, opts ...grpc.CallOption) (*TaskResponse, error)
 	EditTask(ctx context.Context, in *EditTaskDetails, opts ...grpc.CallOption) (*TaskResponse, error)
+	DeleteTask(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*Empty, error)
+	GetTaskbyId(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*TaskDetails, error)
 }
 
 type goTaskServiceClient struct {
@@ -73,6 +75,24 @@ func (c *goTaskServiceClient) EditTask(ctx context.Context, in *EditTaskDetails,
 	return out, nil
 }
 
+func (c *goTaskServiceClient) DeleteTask(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/GoTask.GoTaskService/DeleteTask", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *goTaskServiceClient) GetTaskbyId(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*TaskDetails, error) {
+	out := new(TaskDetails)
+	err := c.cc.Invoke(ctx, "/GoTask.GoTaskService/GetTaskbyId", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GoTaskServiceServer is the server API for GoTaskService service.
 // All implementations must embed UnimplementedGoTaskServiceServer
 // for forward compatibility
@@ -82,6 +102,8 @@ type GoTaskServiceServer interface {
 	// ------>
 	CreateTask(context.Context, *TaskDetails) (*TaskResponse, error)
 	EditTask(context.Context, *EditTaskDetails) (*TaskResponse, error)
+	DeleteTask(context.Context, *TaskDelete) (*Empty, error)
+	GetTaskbyId(context.Context, *TaskDelete) (*TaskDetails, error)
 	mustEmbedUnimplementedGoTaskServiceServer()
 }
 
@@ -100,6 +122,12 @@ func (UnimplementedGoTaskServiceServer) CreateTask(context.Context, *TaskDetails
 }
 func (UnimplementedGoTaskServiceServer) EditTask(context.Context, *EditTaskDetails) (*TaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EditTask not implemented")
+}
+func (UnimplementedGoTaskServiceServer) DeleteTask(context.Context, *TaskDelete) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTask not implemented")
+}
+func (UnimplementedGoTaskServiceServer) GetTaskbyId(context.Context, *TaskDelete) (*TaskDetails, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTaskbyId not implemented")
 }
 func (UnimplementedGoTaskServiceServer) mustEmbedUnimplementedGoTaskServiceServer() {}
 
@@ -186,6 +214,42 @@ func _GoTaskService_EditTask_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GoTaskService_DeleteTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskDelete)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoTaskServiceServer).DeleteTask(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/GoTask.GoTaskService/DeleteTask",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoTaskServiceServer).DeleteTask(ctx, req.(*TaskDelete))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GoTaskService_GetTaskbyId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TaskDelete)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GoTaskServiceServer).GetTaskbyId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/GoTask.GoTaskService/GetTaskbyId",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GoTaskServiceServer).GetTaskbyId(ctx, req.(*TaskDelete))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GoTaskService_ServiceDesc is the grpc.ServiceDesc for GoTaskService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -208,6 +272,14 @@ var GoTaskService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EditTask",
 			Handler:    _GoTaskService_EditTask_Handler,
+		},
+		{
+			MethodName: "DeleteTask",
+			Handler:    _GoTaskService_DeleteTask_Handler,
+		},
+		{
+			MethodName: "GetTaskbyId",
+			Handler:    _GoTaskService_GetTaskbyId_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

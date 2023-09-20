@@ -7,4 +7,5 @@ type Customer interface {
 	InsertToken(Login *models.Token) (*models.TokenResponse, error)
 	CreateTask(Task *models.Task) (*models.Task, error)
 	EditTask(Task *models.EditTaskDetails) (*models.Task, error)
+	DeleteTask(Task *models.EditTaskDetails)(error)
 }
