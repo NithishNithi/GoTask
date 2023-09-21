@@ -29,7 +29,7 @@ func (s *RPCServer) CreateTask(ctx context.Context, req *pro.TaskDetails) (*pro.
 		responsetask := &pro.TaskResponse{
 			TaskId:  result.TaskId,
 			Title:   result.Title,
-			DueDate: result.TaskId,
+			DueDate: result.DueDate,
 		}
 		return responsetask, nil
 	}

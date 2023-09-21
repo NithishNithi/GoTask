@@ -1,9 +1,12 @@
 package services
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"time"
 
+	"github.com/NithishNithi/GoTask/database"
 	"github.com/NithishNithi/GoTask/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -86,3 +89,74 @@ func (p *CustomerService) GetbyTaskId(user *models.EditTaskDetails) (*models.Tas
 	}
 	return result, nil
 }
+
+// ----------------> CheckTaskDueStatus------------>
+
+func CheckTaskDueStatus() {
+	mongoclient, _ := database.ConnectDatabase()
+	TaskCollection := mongoclient.Database("GoTask").Collection("TaskManagement")
+	for {
+		// Parse the current time in the same format as your due date
+		currentTime := time.Now()
+		currentTimeStr := currentTime.Format("2006-01-02 15:04:05")
+		currentTimeUTC, err := time.Parse("2006-01-02 15:04:05", currentTimeStr)
+		fmt.Println(currentTimeUTC)
+		if err != nil {
+			log.Printf("Error parsing current time: %v\n", err)
+			continue
+		}
+
+		// Calculate the start of the next minute
+		nextMinute := currentTimeUTC.Add(time.Minute)
+		nextMinute = time.Date(nextMinute.Year(), nextMinute.Month(), nextMinute.Day(), nextMinute.Hour(), nextMinute.Minute(), 0, 0, nextMinute.Location())
+
+		// Calculate the duration until the start of the next minute
+		sleepDuration := nextMinute.Sub(currentTimeUTC)
+
+		// Sleep until the start of the next minute
+		time.Sleep(sleepDuration)
+
+		// Fetch tasks where DueTime has passed and the task is not already marked as completed
+		filter := bson.M{
+			"$and": []bson.M{
+				{"duedate": bson.M{"$lt": currentTimeStr}},
+				{"completed": false},
+			},
+		}
+		ctx := context.TODO()
+		cursor, err := TaskCollection.Find(ctx, filter)
+		fmt.Println("cursor:",cursor)
+		if err != nil {
+			log.Printf("Error while querying tasks: %v\n", err)
+			continue
+		}
+
+		for cursor.Next(ctx) {
+			var task models.Task
+			if err := cursor.Decode(&task); err != nil {
+				log.Printf("Error decoding task: %v\n", err)
+				continue
+			}
+			// Mark the task as completed
+			task.Completed = true
+
+			// Update the task's completion status in the database
+			update := bson.M{"$set": bson.M{"completed": true}}
+			options := options.Update()
+			response, err := TaskCollection.UpdateOne(ctx, bson.M{"taskid": task.TaskId }, update, options)
+			fmt.Println("cus:",task.CustomerId," task:",task.TaskId)
+			fmt.Println("1",response.ModifiedCount)
+			fmt.Println("2",response.MatchedCount)
+			fmt.Println("3",response.UpsertedCount)
+			if err != nil {
+				log.Printf("Error updating task: %v\n", err)
+			}
+		}
+	}
+}
+
+func RunTaskDueStatusChecker() {
+	fmt.Println("1")
+	go CheckTaskDueStatus()
+}
+
