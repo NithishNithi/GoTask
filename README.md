@@ -1,3 +1,4 @@
+
 <h3>Project Name: GoTask</h3>
 
 <h5>Idea Overview: GoTask is a task management and productivity tool designed to help individuals and teams organize their work, track progress, and achieve their goals. It can serve as a standalone application or be integrated into existing productivity software.</h5>
@@ -33,7 +34,9 @@ https://github.com/NithishNithi/GoShop.git
 17. Customization: - Implementation: Allow users to customize the user interface by providing theme options or custom CSS styles. Implement user-specific preferences in the database.<br>
 18. Community and Support: - Implementation: Create a user community by setting up forums or discussion boards. Offer customer support through email or chat. Maintain comprehensive documentation for users and developers.<br>
 To build GoTask's backend, you'll need to set up a Go web server (e.g., using the Gin or Echo framework) and create RESTful API endpoints for various features. Use a suitable database to store user data, task data, and related information. Implement user authentication and authorization to secure user accounts and data. Additionally, you'll need to handle data validation, error handling, and request/response serialization.<br>
+
 This project can be complex, so it's essential to break it down into smaller, manageable tasks and plan your development process accordingly.
+<br>
 
     1. Task Creation: Users can create, edit, and delete tasks. Tasks can have titles, descriptions, due dates, priority levels, and labels/categories.
     2. Task Organization: Implement a system for organizing tasks, such as lists, boards, or tags. Allow users to create custom categories.
