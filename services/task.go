@@ -4,10 +4,16 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
+	"net/smtp"
 	"time"
 
+	// "github.com/NithishNithi/GoTask/constants"
+	"github.com/NithishNithi/GoTask/constants"
 	"github.com/NithishNithi/GoTask/database"
 	"github.com/NithishNithi/GoTask/models"
+	"github.com/twilio/twilio-go"
+	twilioApi "github.com/twilio/twilio-go/rest/api/v2010"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -100,6 +106,7 @@ func (p *CustomerService) GetbyTaskId(user *models.EditTaskDetails) (*models.Tas
 func CheckTaskDueStatus() {
 	mongoclient, _ := database.ConnectDatabase()
 	TaskCollection := mongoclient.Database("GoTask").Collection("TaskManagement")
+	CustomerCollection := mongoclient.Database("GoTask").Collection("CustomerProfile")
 	for {
 		// Parse the current time in the same format as your due date
 		currentTime := time.Now()
@@ -112,7 +119,6 @@ func CheckTaskDueStatus() {
 		// sleepDuration := nextMinute.Sub(currentTimeUTC)
 
 		// Sleep until the start of the next minute
-		
 
 		// Fetch tasks where DueTime has passed and the task is not already marked as completed
 		filter := bson.M{
@@ -138,16 +144,91 @@ func CheckTaskDueStatus() {
 			// Update the task's completion status in the database
 			update := bson.M{"$set": bson.M{"completed": true}}
 			options := options.Update()
-			_, err := TaskCollection.UpdateOne(ctx, bson.M{"taskid": task.TaskId }, update, options)
+			_, err := TaskCollection.UpdateOne(ctx, bson.M{"taskid": task.TaskId}, update, options)
 			if err != nil {
 				log.Printf("Error updating task: %v\n", err)
 			}
+			filter := bson.M{
+				"customerid": task.CustomerId,
+			}
+			var customer *models.Customer
+			err1 := CustomerCollection.FindOne(ctx, filter).Decode(&customer)
+			if err1 != nil {
+				return
+			}
+			go TaskRemainderEmailNotification(task,customer)
+			go TaskRemainderSMSNotification(task, customer)
+
 		}
 		time.Sleep(time.Second)
 	}
 }
 
+func TaskRemainderEmailNotification(task models.Task,customer *models.Customer) {
+	from := constants.Email
+	password := constants.Password
+  
+	// Receiver email address.
+	to := []string{
+	  customer.Email,
+	}
+  
+	// smtp server configuration.
+	smtpHost := "smtp.gmail.com"
+	smtpPort := "587"
+  
+	// Message.
+	message := []byte("This is a test email message.")
+	
+	// Authentication.
+	auth := smtp.PlainAuth("", from, password, smtpHost)
+	
+	// Sending email.
+	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
+	if err != nil {
+	  fmt.Println(err)
+	  return
+	}
+	fmt.Println("Email Sent Successfully!")
+}
+
+func TaskRemainderSMSNotification(task models.Task, customer *models.Customer) {
+
+	accountSid := constants.AccountSID
+	authToken := constants.AuthToken
+	to := customer.PhoneNumber
+	from := constants.PhoneNumber
+	message := "Task ID: " + task.TaskId + ": " + task.Title + ", About: " + task.Description + " has been Completed. This is your Remainder Message from our Team"
+	client := twilio.NewRestClientWithParams(twilio.ClientParams{
+		Username: accountSid,
+		Password: authToken,
+	})
+	// Retry up to 3 times with a delay of 5 seconds between retries
+	for attempt := 1; attempt <= 3; attempt++ {
+		params := &twilioApi.CreateMessageParams{
+			To:   &to,
+			From: &from,
+			Body: &message,
+		}
+		_, err := client.Api.CreateMessage(params)
+		if err != nil {
+			log.Printf("Attempt %d: Error sending SMS message: %v", attempt, err)
+			if isTimeoutError(err) {
+				// Sleep for 5 seconds before retrying
+				time.Sleep(5 * time.Second)
+				continue
+			}
+			break
+		}
+		break
+	}
+}
+
+func isTimeoutError(err error) bool {
+	netErr, isNetErr := err.(net.Error)
+	return isNetErr && netErr.Timeout()
+}
+
 func RunTaskDueStatusChecker() {
 	go CheckTaskDueStatus()
 }
-
