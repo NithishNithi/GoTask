@@ -5,10 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/smtp"
 	"time"
 
-	// "github.com/NithishNithi/GoTask/constants"
 	"github.com/NithishNithi/GoTask/constants"
 	"github.com/NithishNithi/GoTask/database"
 	"github.com/NithishNithi/GoTask/models"
@@ -156,7 +154,6 @@ func CheckTaskDueStatus() {
 			if err1 != nil {
 				return
 			}
-			go TaskRemainderEmailNotification(task,customer)
 			go TaskRemainderSMSNotification(task, customer)
 
 		}
@@ -164,36 +161,7 @@ func CheckTaskDueStatus() {
 	}
 }
 
-func TaskRemainderEmailNotification(task models.Task,customer *models.Customer) {
-	from := constants.Email
-	password := constants.Password
-  
-	// Receiver email address.
-	to := []string{
-	  customer.Email,
-	}
-  
-	// smtp server configuration.
-	smtpHost := "smtp.gmail.com"
-	smtpPort := "587"
-  
-	// Message.
-	message := []byte("This is a test email message.")
-	
-	// Authentication.
-	auth := smtp.PlainAuth("", from, password, smtpHost)
-	
-	// Sending email.
-	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
-	if err != nil {
-	  fmt.Println(err)
-	  return
-	}
-	fmt.Println("Email Sent Successfully!")
-}
-
 func TaskRemainderSMSNotification(task models.Task, customer *models.Customer) {
-
 	accountSid := constants.AccountSID
 	authToken := constants.AuthToken
 	to := customer.PhoneNumber
@@ -223,7 +191,6 @@ func TaskRemainderSMSNotification(task models.Task, customer *models.Customer) {
 		break
 	}
 }
-
 func isTimeoutError(err error) bool {
 	netErr, isNetErr := err.(net.Error)
 	return isNetErr && netErr.Timeout()
