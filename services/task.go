@@ -20,7 +20,6 @@ import (
 func (p *CustomerService) CreateTask(user *models.Task) (*models.Task, error) {
 	_, err := time.Parse("2006-01-02 15:04:05", user.DueDate)
 	if err != nil {
-		// Due date format is incorrect, return an error
 		return nil, fmt.Errorf("due date format is invalid: %v", err)
 	}
 	user.CreatedAt = time.Now().Format(time.RFC850)
@@ -106,19 +105,9 @@ func CheckTaskDueStatus() {
 	TaskCollection := mongoclient.Database("GoTask").Collection("TaskManagement")
 	CustomerCollection := mongoclient.Database("GoTask").Collection("CustomerProfile")
 	for {
-		// Parse the current time in the same format as your due date
 		currentTime := time.Now()
 		currentTimeStr := currentTime.Format("2006-01-02 15:04:05")
-		// Calculate the start of the next minute
-		// nextMinute := currentTimeUTC.Add(time.Minute)
-		// nextMinute = time.Date(nextMinute.Year(), nextMinute.Month(), nextMinute.Day(), nextMinute.Hour(), nextMinute.Minute(), 0, 0, nextMinute.Location())
 
-		// // Calculate the duration until the start of the next minute
-		// sleepDuration := nextMinute.Sub(currentTimeUTC)
-
-		// Sleep until the start of the next minute
-
-		// Fetch tasks where DueTime has passed and the task is not already marked as completed
 		filter := bson.M{
 			"$and": []bson.M{
 				{"duedate": bson.M{"$lt": currentTimeStr}},
@@ -137,9 +126,7 @@ func CheckTaskDueStatus() {
 				log.Printf("Error decoding task: %v\n", err)
 				continue
 			}
-			// Mark the task as completed
 			task.Completed = true
-			// Update the task's completion status in the database
 			update := bson.M{"$set": bson.M{"completed": true}}
 			options := options.Update()
 			_, err := TaskCollection.UpdateOne(ctx, bson.M{"taskid": task.TaskId}, update, options)
@@ -191,11 +178,10 @@ func TaskRemainderSMSNotification(task models.Task, customer *models.Customer) {
 		break
 	}
 }
+
 func isTimeoutError(err error) bool {
 	netErr, isNetErr := err.(net.Error)
 	return isNetErr && netErr.Timeout()
 }
 
-func RunTaskDueStatusChecker() {
-	go CheckTaskDueStatus()
-}
+

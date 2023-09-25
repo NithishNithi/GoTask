@@ -17,3 +17,7 @@ type CustomerService struct {
 func InitCustomerService(collection1, collection2, collection3 *mongo.Collection, ctx context.Context) interfaces.Customer {
 	return &CustomerService{collection1, collection2, collection3, ctx}
 }
+
+func RunTaskDueStatusChecker() {
+	go CheckTaskDueStatus()
+}
