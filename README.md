@@ -3,7 +3,8 @@
 
 <h5>Idea Overview: GoTask is a task management and productivity tool designed to help individuals and teams organize their work, track progress, and achieve their goals. It can serve as a standalone application or be integrated into existing productivity software.</h5>
 
-https://github.com/NithishNithi/GoShop.git
+
+<a href="https://github.com/NithishNithi/GoTask">"Github"</a>
 <br>
 
 1. Task Creation:
