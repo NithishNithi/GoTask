@@ -31,6 +31,7 @@ func (p *CustomerService) CreateTask(user *models.Task) (*models.Task, error) {
 	err1 := p.TaskCollection.FindOne(p.ctx, bson.M{"_id": result.InsertedID}).Decode(&newtask)
 	if err1 != nil {
 		return nil, err1
+
 	}
 	return newtask, nil
 }
@@ -183,5 +184,3 @@ func isTimeoutError(err error) bool {
 	netErr, isNetErr := err.(net.Error)
 	return isNetErr && netErr.Timeout()
 }
-
-
