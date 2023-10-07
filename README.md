@@ -1,5 +1,6 @@
-GoTask is a task management and productivity tool designed to help individuals and teams organize their work, track progress, and achieve their goals. It can serve as a standalone application or be integrated into existing productivity software
-<h3>Project Name: GoTask</h3>
+#GoTask
+It is used manage,organize and track their task progress.
+
 
 <h5>Idea Overview: GoTask is a task management and productivity tool designed to help individuals and teams organize their work, track progress, and achieve their goals. It can serve as a standalone application or be integrated into existing productivity software.</h5>
 
