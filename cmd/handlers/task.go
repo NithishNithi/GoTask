@@ -106,3 +106,25 @@ func GetbyTaskId(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": response})
 
 }
+
+func GetTask(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
+		return
+	}
+	customerid, err := services.ExtractCustomerID(token, constants.SecretKey)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
+		return
+	}
+	Client, _ := grpcclient.GetGrpcClientInstance()
+	_, err1 := Client.GetTask(c.Request.Context(), &pb.TaskDelete{CustomerId: customerid})
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err1})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"message": "Tasks Found"})
+	}
+
+}

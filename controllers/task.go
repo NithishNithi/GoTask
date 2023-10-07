@@ -82,11 +82,11 @@ func (s *RPCServer) GetTaskbyId(ctx context.Context, req *pro.TaskDelete) (*pro.
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
 	}
-	dbgettask := models.EditTaskDetails{
+	dbgettaskbyid := models.EditTaskDetails{
 		TaskId:     req.TaskId,
 		CustomerId: req.CustomerId,
 	}
-	result, err := CustomerService.GetbyTaskId(&dbgettask)
+	result, err := CustomerService.GetbyTaskId(&dbgettaskbyid)
 	if err != nil {
 		return nil, err
 	} else {
@@ -103,4 +103,18 @@ func (s *RPCServer) GetTaskbyId(ctx context.Context, req *pro.TaskDelete) (*pro.
 		}
 		return responsetask, nil
 	}
+}
+
+func (s *RPCServer)GetTask(ctx context.Context,req *pro.TaskDelete)(*pro.Empty,error){
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
+	}
+	dbgettask:=models.EditTaskDetails{
+		CustomerId : req.CustomerId ,
+	}
+	err:=CustomerService.GetTask(&dbgettask)
+	if err != nil {
+		return nil, err
+	}
+	return &pro.Empty{},nil
 }

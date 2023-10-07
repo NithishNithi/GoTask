@@ -12,6 +12,7 @@ service GoTaskService {
     rpc EditTask(EditTaskDetails)returns(TaskResponse);
     rpc DeleteTask(TaskDelete)returns(Empty);
     rpc GetTaskbyId(TaskDelete)returns(TaskDetails);
+    rpc GetTask (TaskDelete) returns (Empty);
 }
 // --------->
 message CustomerDetails {

@@ -5,11 +5,16 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"os/user"
+	"path/filepath"
 	"time"
 
 	"github.com/NithishNithi/GoTask/constants"
 	"github.com/NithishNithi/GoTask/database"
 	"github.com/NithishNithi/GoTask/models"
+
+	"github.com/jung-kurt/gofpdf"
 	"github.com/twilio/twilio-go"
 	twilioApi "github.com/twilio/twilio-go/rest/api/v2010"
 	"go.mongodb.org/mongo-driver/bson"
@@ -99,8 +104,75 @@ func (p *CustomerService) GetbyTaskId(user *models.EditTaskDetails) (*models.Tas
 	return result, nil
 }
 
-// ----------------> CheckTaskDueStatus------------>
+//  Get task by customerid and save as *pdf ----->
+func (p *CustomerService) GetTask(user1 *models.EditTaskDetails) error {
+	filter := bson.M{"customerid": user1.CustomerId}
+	cursor, err := p.TaskCollection.Find(p.ctx, filter)
+	if err != nil {
+		return err
+	}
+	var Tasks []models.Task
+	for cursor.Next(context.TODO()) {
+		var task models.Task
+		err := cursor.Decode(&task)
+		if err != nil {
+			return err
+		}
+		Tasks = append(Tasks, task)
+	}
+	pdf := gofpdf.New("P", "mm", "A4", "")
+	pdf.AddPage()
+	pdf.SetFont("Arial", "B", 16)
 
+	for _, task := range Tasks {
+		// Add task information to the PDF
+		pdf.Cell(0, 10, "Task ID: "+task.TaskId)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Task Title: "+task.Title)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Description: "+task.Description)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Due Date: "+task.DueDate)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Priority: "+task.Priority)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Category: "+task.Category)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Created At: "+task.CreatedAt)
+		pdf.Ln(10)
+		pdf.Cell(0, 10, "Completed: "+fmt.Sprintf("%v", task.Completed))
+		pdf.Ln(10)
+		// Add more task fields as needed
+		pdf.Ln(10) // Add space between tasks
+	}
+	// Get the current user's home directory
+	usr, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Construct the full path to the "Downloads" folder
+	downloadsFolder := filepath.Join(usr.HomeDir, "Downloads")
+	// Ensure the "Downloads" folder exists
+	if err := os.MkdirAll(downloadsFolder, os.ModePerm); err != nil {
+		log.Fatal(err)
+	}
+	// Generate the PDF filename
+	fileName := filepath.Join(downloadsFolder, "tasks.pdf")
+	// Create a new file for writing the PDF
+	file, err := os.Create(fileName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	// Output the PDF to the file
+	err = pdf.Output(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return nil
+}
+
+// ----------------> CheckTaskDueStatus------------>
 func CheckTaskDueStatus() {
 	mongoclient, _ := database.ConnectDatabase()
 	TaskCollection := mongoclient.Database("GoTask").Collection("TaskManagement")
