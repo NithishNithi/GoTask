@@ -19,7 +19,6 @@ func (s *RPCServer) CreateCustomer(ctx context.Context, req *pro.CustomerDetails
 		}
 	}
 	dbCustomer := models.Customer{
-		CustomerId:  req.CustomerId,
 		FullName:    req.FullName,
 		Email:       req.Email,
 		Password:    req.Password,

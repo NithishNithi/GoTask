@@ -12,6 +12,7 @@ import (
 )
 
 func (p *CustomerService) CreateCustomer(user *models.Customer) (*models.CustomerResponse, error) {
+	user.CustomerId=GenerateUniqueCustomerID()
 	// Check if a customer with the same customerId or email already exists
 	filter := bson.D{
 		{"$or", []interface{}{
