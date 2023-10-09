@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -13,15 +14,15 @@ import (
 
 func CreateCustomer(c *gin.Context) {
 	var request pb.CustomerDetails
-	err := c.ShouldBindJSON(&request)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := c.ShouldBindJSON(&request); err != nil {
+		fmt.Println("error")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
 		return
 	}
 	Client, _ := grpcclient.GetGrpcClientInstance()
 	response, err1 := Client.CreateCustomer(c.Request.Context(), &request)
 	if err1 != nil {
-		log.Fatal(err1)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err1})
 	}
 	c.JSON(http.StatusOK, gin.H{"value": response})
 }
@@ -33,9 +34,9 @@ func LoginCustomer(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	if services.IsValidUser(request) {
-		token, err := services.CreateToken(request.Email, request.CustomerId)
+	status, ans := services.IsValidUser(request)
+	if status {
+		token, err := services.CreateToken(request.Email, ans.CustomerId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Token creation failed"})
 			return

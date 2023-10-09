@@ -22,16 +22,14 @@ message CustomerDetails {
     string Password = 4;
     string DateofBirth = 5;
     string PhoneNumber = 6;
-    repeated Address address = 7;
+    string HouseNo = 7;
+    string Street = 8;
+    string City = 9;
+    string Country =10;
+    string Zip = 11;
+    
 }
 
-message Address {
-    string Country = 1;
-    string Street = 2;
-    string City = 3;
-    string State = 4;
-    string Zip = 5;
-}
 
 message CustomerResponse {
     string CustomerId = 1;

@@ -8,23 +8,17 @@ import (
 )
 
 func (s *RPCServer) CreateCustomer(ctx context.Context, req *pro.CustomerDetails) (*pro.CustomerResponse, error) {
-	var address models.Address
-	if req != nil {
-		address = models.Address{
-			Country: req.Address[0].Country,
-			Street:  req.Address[0].Street,
-			City:    req.Address[0].City,
-			State:   req.Address[0].State,
-			Zip:     req.Address[0].Zip,
-		}
-	}
 	dbCustomer := models.Customer{
 		FullName:    req.FullName,
 		Email:       req.Email,
 		Password:    req.Password,
 		DateofBirth: req.DateofBirth,
 		PhoneNumber: req.PhoneNumber,
-		Address:     []models.Address{address},
+		HouseNo:     req.HouseNo,
+		Street:      req.Street,
+		City:        req.City,
+		Country:     req.Country,
+		Zip:         req.Zip,
 	}
 
 	result, err := CustomerService.CreateCustomer(&dbCustomer)

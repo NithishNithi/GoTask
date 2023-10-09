@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/NithishNithi/GoTask/database"
@@ -12,7 +13,7 @@ import (
 )
 
 func (p *CustomerService) CreateCustomer(user *models.Customer) (*models.CustomerResponse, error) {
-	user.CustomerId=GenerateUniqueCustomerID()
+	user.CustomerId = GenerateUniqueCustomerID()
 	// Check if a customer with the same customerId or email already exists
 	filter := bson.D{
 		{"$or", []interface{}{
@@ -20,7 +21,6 @@ func (p *CustomerService) CreateCustomer(user *models.Customer) (*models.Custome
 			bson.D{{"email", user.Email}},
 		}},
 	}
-
 	existingCustomer := &models.Customer{}
 	err := p.CustomerCollection.FindOne(p.ctx, filter).Decode(existingCustomer)
 	if err == nil {
@@ -46,29 +46,28 @@ func (p *CustomerService) CreateCustomer(user *models.Customer) (*models.Custome
 	response := &models.CustomerResponse{
 		CustomerId: newCustomer.CustomerId,
 	}
+
 	return response, nil
 }
 
-func IsValidUser(user *models.Login) bool {
+func IsValidUser(user *models.Login) (bool, models.Customer) {
 
 	mongoclient, _ := database.ConnectDatabase()
 	collection := mongoclient.Database("GoTask").Collection("CustomerProfile")
 
 	query := bson.M{"email": user.Email}
-
+	fmt.Println(user.Email)
 	var customer models.Customer
 
 	err := collection.FindOne(context.TODO(), query).Decode(&customer)
 	if err != nil {
-		return false
-	}
-	if user.CustomerId != customer.CustomerId {
-		return false
+		fmt.Println("111")
+		return false, customer
 	}
 	if customer.Password != user.Password {
-		return false
+		return false, customer
 	}
-	return true
+	return true, customer
 }
 
 func (p *CustomerService) InsertToken(user *models.Token) (*models.TokenResponse, error) {

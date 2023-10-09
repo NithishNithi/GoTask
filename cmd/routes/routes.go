@@ -8,6 +8,9 @@ import (
 
 func SetUpRoutes(r *gin.Engine) {
 	services.RunTaskDueStatusChecker()
+
+	r.Static("/signup", "/home/mrnithisht/go/src/GoTask/frontend/signup")
+
 	auth := r.Group("/auth")
 	{
 		auth.POST("/register", handlers.CreateCustomer)
@@ -20,6 +23,6 @@ func SetUpRoutes(r *gin.Engine) {
 		task.POST("/edittask/:taskid", handlers.EditTask)
 		task.GET("/deletetask/:taskid", handlers.DeleteTask)
 		task.GET("/gettaskbyid/:taskid", handlers.GetbyTaskId)
-		task.GET("/gettask",handlers.GetTask)
+		task.GET("/gettask", handlers.GetTask)
 	}
 }
