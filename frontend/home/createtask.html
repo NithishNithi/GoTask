@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Create Task</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" href="asset/icon.jpeg">
+    <style>
+        /* Additional custom styles */
+        body {
+            background-image: url('asset/background.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            color: #f61b1b;
+            margin-bottom: 30px;
+        }
+
+        button[type="submit"] {
+            background-color: #9c314f;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 4px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #403e3e;
+        }
+
+        .form-group label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .form-group input,
+        .form-group select {
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .form-group small {
+            color: red;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        <h1 style="color: #070707; font-weight: bolder;">Create Task</h1>
+        <form id="customerForm">
+            <div class="form-group">
+                <label for="taskid">Task Id:</label>
+                <input type="text" id="taskid" name="taskid" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <input type="text" id="description" name="description" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="duedate">Due Date and Time (YYYY-MM-DD HH:mm:ss):</label>
+                <input type="text" id="duedate" name="dueDate" class="form-control"
+                    placeholder="Enter date and time in the format YYYY-MM-DD HH:mm:ss" required>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">Choose a Level:</label>
+                <select name="priority" id="priority" class="form-control">
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" class="form-control" required>
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Create Task</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Add the required Bootstrap JavaScript and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // JavaScript to handle form submission
+        document.getElementById("customerForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // Retrieve the token from session storage
+            const tokenDataString = sessionStorage.getItem('token');
+            // Parse the JSON string back into an object
+            const tokenData = JSON.parse(tokenDataString);
+            // Now 'tokenData' contains your object
+            console.log(tokenData.token); // Access the 'token' property
+
+
+            // Create a JSON object with form data and the token
+            const formData = {
+                token: tokenData.token,
+                taskid: document.getElementById("taskid").value,
+                title: document.getElementById("title").value,
+                description: document.getElementById("description").value,
+                duedate: document.getElementById("duedate").value,
+                priority: document.getElementById("priority").value,
+                category: document.getElementById("category").value,
+            };
+
+            // Make a POST request to the backend
+            fetch("/tasks/createtask", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Response received:", data);
+                    if (data && data.message) {
+                        alert("Task created successfully");
+                        window.location.href = '/home';
+                    } else {
+                        alert("Failed: " + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("Error while creating task: " + error.message);
+                });
+        });
+    </script>
+</body>
+
+</html>

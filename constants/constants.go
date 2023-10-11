@@ -1,6 +1,6 @@
 package constants
 
-const ConnectionString = "mongodb+srv://mrnithisht:mrnithisht@banking.taaq05t.mongodb.net/"
+const ConnectionString = "mongodb+srv://mrnithisht:mrnithisht@nithi1.ufjvb6g.mongodb.net/"
 const Port = ":5000"
 const SecretKey = "GoTask-By-Nithi"
 const AccountSID = "AC8de01cb2d2ff11485290c6e0a1686136"

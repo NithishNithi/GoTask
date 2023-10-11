@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 
 	"github.com/NithishNithi/GoTask/database"
@@ -51,17 +50,12 @@ func (p *CustomerService) CreateCustomer(user *models.Customer) (*models.Custome
 }
 
 func IsValidUser(user *models.Login) (bool, models.Customer) {
-
 	mongoclient, _ := database.ConnectDatabase()
 	collection := mongoclient.Database("GoTask").Collection("CustomerProfile")
-
 	query := bson.M{"email": user.Email}
-	fmt.Println(user.Email)
 	var customer models.Customer
-
 	err := collection.FindOne(context.TODO(), query).Decode(&customer)
 	if err != nil {
-		fmt.Println("111")
 		return false, customer
 	}
 	if customer.Password != user.Password {

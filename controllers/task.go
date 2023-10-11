@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/NithishNithi/GoTask/models"
 	pro "github.com/NithishNithi/GoTask/proto"
@@ -40,7 +39,6 @@ func (s *RPCServer) EditTask(ctx context.Context, req *pro.EditTaskDetails) (*pr
 		return nil, status.Error(codes.InvalidArgument, "Request is nil")
 	}
 	if req.CustomerId == "" || req.Field == "" || req.TaskId == "" || req.Value == "" {
-		fmt.Println("error fpound")
 		return nil, status.Error(codes.InvalidArgument, "Missing required fields")
 	}
 
@@ -105,16 +103,38 @@ func (s *RPCServer) GetTaskbyId(ctx context.Context, req *pro.TaskDelete) (*pro.
 	}
 }
 
-func (s *RPCServer)GetTask(ctx context.Context,req *pro.TaskDelete)(*pro.Empty,error){
+func (s *RPCServer) GetTask(ctx context.Context, req *pro.TaskDelete) (*pro.GetTasksResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
 	}
-	dbgettask:=models.EditTaskDetails{
-		CustomerId : req.CustomerId ,
+	dbgettask := models.EditTaskDetails{
+		CustomerId: req.CustomerId,
 	}
-	err:=CustomerService.GetTask(&dbgettask)
+	tasks, err := CustomerService.GetTask(&dbgettask)
 	if err != nil {
 		return nil, err
 	}
-	return &pro.Empty{},nil
+	var taskDetails []*pro.TaskDetails
+	for _, task := range tasks {
+		// Create a TaskDetails message for each task in the slice
+		taskDetail := &pro.TaskDetails{
+			TaskId:      task.TaskId,
+			CustomerId:  task.CustomerId,
+			Title:       task.Title,
+			Description: task.Description,
+			DueDate:     task.DueDate,
+			Priority:    task.Priority,
+			Category:    task.Category,
+			CreatedAt:   task.CreatedAt,
+			Completed:   task.Completed,
+		}
+
+		taskDetails = append(taskDetails, taskDetail)
+	}
+
+	response := &pro.GetTasksResponse{
+		Tasks: taskDetails,
+	}
+
+	return response, nil
 }

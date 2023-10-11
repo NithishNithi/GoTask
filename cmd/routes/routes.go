@@ -10,6 +10,10 @@ func SetUpRoutes(r *gin.Engine) {
 	services.RunTaskDueStatusChecker()
 
 	r.Static("/signup", "/home/mrnithisht/go/src/GoTask/frontend/signup")
+	r.Static("/signin", "/home/mrnithisht/go/src/GoTask/frontend/signin")
+	r.Static("/home", "/home/mrnithisht/go/src/GoTask/frontend/home")
+
+	
 
 	auth := r.Group("/auth")
 	{
@@ -23,6 +27,6 @@ func SetUpRoutes(r *gin.Engine) {
 		task.POST("/edittask/:taskid", handlers.EditTask)
 		task.GET("/deletetask/:taskid", handlers.DeleteTask)
 		task.GET("/gettaskbyid/:taskid", handlers.GetbyTaskId)
-		task.GET("/gettask", handlers.GetTask)
+		task.POST("/gettask", handlers.GetTask)
 	}
 }

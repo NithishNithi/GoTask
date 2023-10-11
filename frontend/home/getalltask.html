@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .product {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+        }
+
+        .product h2 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>All Task Details</h1>
+
+
+    <center>
+        <div class="product-container" id="product-container">
+            <!-- Task items will be dynamically added here -->
+        </div>
+    </center>
+
+    <script>
+        const tokenDataString = sessionStorage.getItem('token');
+        const tokenData = JSON.parse(tokenDataString);
+        //console.log(tokenData.token);
+        const productContainer = document.getElementById('product-container');
+
+        async function fetchAndDisplayTasks(token) {
+            try {
+                const data = {
+                    token: token
+                };
+                const response = await fetch('/tasks/gettask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const responseJson = await response.json();
+                const tasks = responseJson.message.Tasks;
+
+                tasks.forEach(task => {
+                    const taskCard = document.createElement('div');
+                    taskCard.classList.add('product');
+
+                    taskCard.innerHTML = `
+                <h2>${task.Title}</h2>
+                <h3>TaskId:${task.TaskId}</h3>
+                <p>Description: ${task.Description}</p>
+                <p>Due Date: ${task.DueDate}</p>
+                <p>Priority: ${task.Priority}</p>
+                <p>Category: ${task.Category}</p>
+                <p>Created At: ${task.CreatedAt}</p>
+                <p>Completed: ${task.Completed ? 'Yes' : 'No'}</p>
+            `;
+                    productContainer.appendChild(taskCard);
+                });
+
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+
+        fetchAndDisplayTasks(tokenData.token);
+
+
+    </script>
+</body>
+
+</html>

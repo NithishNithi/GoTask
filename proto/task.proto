@@ -12,8 +12,19 @@ service GoTaskService {
     rpc EditTask(EditTaskDetails)returns(TaskResponse);
     rpc DeleteTask(TaskDelete)returns(Empty);
     rpc GetTaskbyId(TaskDelete)returns(TaskDetails);
-    rpc GetTask (TaskDelete) returns (Empty);
+    rpc GetTask (TaskDelete) returns (GetTasksResponse);
 }
+
+
+
+message GetTasksResponse {
+    repeated TaskDetails Tasks = 1;
+}
+
+
+
+
+
 // --------->
 message CustomerDetails {
     string CustomerId = 1;

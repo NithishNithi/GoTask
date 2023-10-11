@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"fmt"
+
 	"log"
 	"net/http"
 
@@ -15,7 +15,6 @@ import (
 func CreateCustomer(c *gin.Context) {
 	var request pb.CustomerDetails
 	if err := c.ShouldBindJSON(&request); err != nil {
-		fmt.Println("error")
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
 		return
 	}

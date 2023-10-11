@@ -29,7 +29,7 @@ type GoTaskServiceClient interface {
 	EditTask(ctx context.Context, in *EditTaskDetails, opts ...grpc.CallOption) (*TaskResponse, error)
 	DeleteTask(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*Empty, error)
 	GetTaskbyId(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*TaskDetails, error)
-	GetTask(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*Empty, error)
+	GetTask(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*GetTasksResponse, error)
 }
 
 type goTaskServiceClient struct {
@@ -94,8 +94,8 @@ func (c *goTaskServiceClient) GetTaskbyId(ctx context.Context, in *TaskDelete, o
 	return out, nil
 }
 
-func (c *goTaskServiceClient) GetTask(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *goTaskServiceClient) GetTask(ctx context.Context, in *TaskDelete, opts ...grpc.CallOption) (*GetTasksResponse, error) {
+	out := new(GetTasksResponse)
 	err := c.cc.Invoke(ctx, "/GoTask.GoTaskService/GetTask", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -114,7 +114,7 @@ type GoTaskServiceServer interface {
 	EditTask(context.Context, *EditTaskDetails) (*TaskResponse, error)
 	DeleteTask(context.Context, *TaskDelete) (*Empty, error)
 	GetTaskbyId(context.Context, *TaskDelete) (*TaskDetails, error)
-	GetTask(context.Context, *TaskDelete) (*Empty, error)
+	GetTask(context.Context, *TaskDelete) (*GetTasksResponse, error)
 	mustEmbedUnimplementedGoTaskServiceServer()
 }
 
@@ -140,7 +140,7 @@ func (UnimplementedGoTaskServiceServer) DeleteTask(context.Context, *TaskDelete)
 func (UnimplementedGoTaskServiceServer) GetTaskbyId(context.Context, *TaskDelete) (*TaskDetails, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTaskbyId not implemented")
 }
-func (UnimplementedGoTaskServiceServer) GetTask(context.Context, *TaskDelete) (*Empty, error) {
+func (UnimplementedGoTaskServiceServer) GetTask(context.Context, *TaskDelete) (*GetTasksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetTask not implemented")
 }
 func (UnimplementedGoTaskServiceServer) mustEmbedUnimplementedGoTaskServiceServer() {}
