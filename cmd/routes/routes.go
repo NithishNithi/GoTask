@@ -9,11 +9,9 @@ import (
 func SetUpRoutes(r *gin.Engine) {
 	services.RunTaskDueStatusChecker()
 
-	r.Static("/signup", "/home/mrnithisht/go/src/GoTask/frontend/signup")
-	r.Static("/signin", "/home/mrnithisht/go/src/GoTask/frontend/signin")
-	r.Static("/home", "/home/mrnithisht/go/src/GoTask/frontend/home")
-
-	
+	r.Static("/signup", "/home/nithish/go/src/GoTask/frontend/signup")
+	r.Static("/signin", "/home/nithish/go/src/GoTask/frontend/signin")
+	r.Static("/home", "/home/nithish/go/src/GoTask/frontend/home")
 
 	auth := r.Group("/auth")
 	{

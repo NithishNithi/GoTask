@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -10,7 +11,6 @@ import (
 	"github.com/NithishNithi/GoTask/constants"
 	"github.com/NithishNithi/GoTask/database"
 	"github.com/NithishNithi/GoTask/models"
-
 	"github.com/twilio/twilio-go"
 	twilioApi "github.com/twilio/twilio-go/rest/api/v2010"
 	"go.mongodb.org/mongo-driver/bson"
@@ -26,15 +26,16 @@ func (p *CustomerService) CreateTask(user *models.Task) (*models.Task, error) {
 	user.CreatedAt = time.Now().Format(time.RFC850)
 	result, err := p.TaskCollection.InsertOne(p.ctx, user)
 	if err != nil {
-		return nil, err
+		log.Printf("Failed to create task: %v", err)
+		return nil, errors.New("Failed to create task")
 	}
-	var newtask *models.Task
-	err1 := p.TaskCollection.FindOne(p.ctx, bson.M{"_id": result.InsertedID}).Decode(&newtask)
+	var newTask *models.Task
+	err1 := p.TaskCollection.FindOne(p.ctx, bson.M{"_id": result.InsertedID}).Decode(&newTask)
 	if err1 != nil {
-		return nil, err1
-
+		log.Printf("Error fetching created task: %v", err1)
+		return nil, errors.New("Failed to fetch created task")
 	}
-	return newtask, nil
+	return newTask, nil
 }
 
 func (p *CustomerService) EditTask(user *models.EditTaskDetails) (*models.Task, error) {
@@ -46,7 +47,7 @@ func (p *CustomerService) EditTask(user *models.EditTaskDetails) (*models.Task, 
 	var existingTask *models.Task
 	err := p.TaskCollection.FindOne(p.ctx, filter).Decode(&existingTask)
 	if err != nil {
-		fmt.Println("error while fetching task")
+		log.Printf("Error while fetching task: %v", err)
 		return nil, err
 	}
 	newUpdate := models.Update{
@@ -58,7 +59,7 @@ func (p *CustomerService) EditTask(user *models.EditTaskDetails) (*models.Task, 
 	options := options.Update()
 	result, err := p.TaskCollection.UpdateOne(p.ctx, filter, update, options)
 	if err != nil {
-		fmt.Println("error while updating")
+		log.Printf("Error while updating task: %v", err)
 		return nil, err
 	}
 	if result.MatchedCount == 0 {
@@ -66,7 +67,7 @@ func (p *CustomerService) EditTask(user *models.EditTaskDetails) (*models.Task, 
 	}
 	err1 := p.TaskCollection.FindOne(p.ctx, filter).Decode(&existingTask)
 	if err1 != nil {
-		fmt.Println("error while fetching task")
+		log.Printf("Error while fetching task: %v", err1)
 		return nil, err1
 	}
 	return existingTask, nil
@@ -79,10 +80,12 @@ func (p *CustomerService) DeleteTask(user *models.EditTaskDetails) error {
 	}
 	result, err := p.TaskCollection.DeleteOne(p.ctx, filter)
 	if err != nil {
-		return fmt.Errorf("error: Task not deleted")
+		log.Printf("Error deleting task: %v", err)
+		return err
 	}
 	if result.DeletedCount == 0 {
-		return fmt.Errorf("error: Task not deleted")
+		log.Println("Task not deleted")
+		return errors.New("Task not deleted")
 	}
 	return nil
 }
@@ -95,35 +98,43 @@ func (p *CustomerService) GetbyTaskId(user *models.EditTaskDetails) (*models.Tas
 	var result *models.Task
 	err := p.TaskCollection.FindOne(p.ctx, filter).Decode(&result)
 	if err != nil {
+		log.Printf("Error fetching task by ID: %v", err)
 		return nil, err
 	}
 	return result, nil
 }
 
-//  Get task by customerid and save as *pdf ----->
 func (p *CustomerService) GetTask(user1 *models.EditTaskDetails) ([]models.Task3, error) {
 	filter := bson.M{"customerid": user1.CustomerId}
 	cursor, err := p.TaskCollection.Find(p.ctx, filter)
 	if err != nil {
+		log.Printf("Error fetching tasks: %v", err)
 		return nil, err
 	}
-	var Tasks []models.Task3
+	var tasks []models.Task3
 	for cursor.Next(context.TODO()) {
 		var task models.Task3
 		err := cursor.Decode(&task)
 		if err != nil {
+			log.Printf("Error decoding task: %v", err)
 			return nil, err
 		}
-		Tasks = append(Tasks, task)
+		tasks = append(tasks, task)
 	}
-	return Tasks, nil
+	return tasks, nil
 }
 
-// ----------------> CheckTaskDueStatus------------>
+// CheckTaskDueStatus periodically checks for tasks that are past their due date and marks them as completed.
 func CheckTaskDueStatus() {
-	mongoclient, _ := database.ConnectDatabase()
+	mongoclient, err := database.ConnectDatabase()
+	if err != nil {
+		log.Printf("Failed to connect to the database: %v", err)
+		return
+	}
+
 	TaskCollection := mongoclient.Database("GoTask").Collection("TaskManagement")
 	CustomerCollection := mongoclient.Database("GoTask").Collection("CustomerProfile")
+
 	for {
 		currentTime := time.Now()
 		currentTimeStr := currentTime.Format("2006-01-02 15:04:05")
@@ -134,50 +145,59 @@ func CheckTaskDueStatus() {
 				{"completed": false},
 			},
 		}
+
 		ctx := context.TODO()
 		cursor, err := TaskCollection.Find(ctx, filter)
 		if err != nil {
-			log.Printf("Error while querying tasks: %v\n", err)
+			log.Printf("Error while querying tasks: %v", err)
 			continue
 		}
+
 		for cursor.Next(ctx) {
 			var task models.Task
 			if err := cursor.Decode(&task); err != nil {
-				log.Printf("Error decoding task: %v\n", err)
+				log.Printf("Error decoding task: %v", err)
 				continue
 			}
+
 			task.Completed = true
 			update := bson.M{"$set": bson.M{"completed": true}}
 			options := options.Update()
 			_, err := TaskCollection.UpdateOne(ctx, bson.M{"taskid": task.TaskId}, update, options)
 			if err != nil {
-				log.Printf("Error updating task: %v\n", err)
+				log.Printf("Error updating task: %v", err)
 			}
+
 			filter := bson.M{
 				"customerid": task.CustomerId,
 			}
+
 			var customer *models.Customer
 			err1 := CustomerCollection.FindOne(ctx, filter).Decode(&customer)
 			if err1 != nil {
+				log.Printf("Error fetching customer: %v", err1)
 				return
 			}
-			go TaskRemainderSMSNotification(task, customer)
 
+			go TaskReminderSMSNotification(task, customer)
 		}
+
 		time.Sleep(time.Second)
 	}
 }
 
-func TaskRemainderSMSNotification(task models.Task, customer *models.Customer) {
+func TaskReminderSMSNotification(task models.Task, customer *models.Customer) {
 	accountSid := constants.AccountSID
 	authToken := constants.AuthToken
 	to := customer.PhoneNumber
 	from := constants.PhoneNumber
-	message := "Task ID: " + task.TaskId + ": " + task.Title + ", About: " + task.Description + " has been Completed. This is your Remainder Message from our Team"
+	message := "Task ID: " + task.TaskId + ": " + task.Title + ", About: " + task.Description + " has been Completed. This is your Reminder Message from our Team"
+
 	client := twilio.NewRestClientWithParams(twilio.ClientParams{
 		Username: accountSid,
 		Password: authToken,
 	})
+
 	// Retry up to 3 times with a delay of 5 seconds between retries
 	for attempt := 1; attempt <= 3; attempt++ {
 		params := &twilioApi.CreateMessageParams{
@@ -185,6 +205,7 @@ func TaskRemainderSMSNotification(task models.Task, customer *models.Customer) {
 			From: &from,
 			Body: &message,
 		}
+
 		_, err := client.Api.CreateMessage(params)
 		if err != nil {
 			log.Printf("Attempt %d: Error sending SMS message: %v", attempt, err)

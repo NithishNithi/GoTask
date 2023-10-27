@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"log"
 
 	"github.com/NithishNithi/GoTask/models"
 	pro "github.com/NithishNithi/GoTask/proto"
@@ -23,15 +24,15 @@ func (s *RPCServer) CreateTask(ctx context.Context, req *pro.TaskDetails) (*pro.
 	}
 	result, err := CustomerService.CreateTask(&dbtask)
 	if err != nil {
-		return nil, err
-	} else {
-		responsetask := &pro.TaskResponse{
-			TaskId:  result.TaskId,
-			Title:   result.Title,
-			DueDate: result.DueDate,
-		}
-		return responsetask, nil
+		log.Printf("Error creating task: %v", err)
+		return nil, status.Error(codes.Internal, "Failed to create task")
 	}
+	responsetask := &pro.TaskResponse{
+		TaskId:  result.TaskId,
+		Title:   result.Title,
+		DueDate: result.DueDate,
+	}
+	return responsetask, nil
 }
 
 func (s *RPCServer) EditTask(ctx context.Context, req *pro.EditTaskDetails) (*pro.TaskResponse, error) {
@@ -50,20 +51,20 @@ func (s *RPCServer) EditTask(ctx context.Context, req *pro.EditTaskDetails) (*pr
 	}
 	result, err := CustomerService.EditTask(&dbtask)
 	if err != nil {
-		return nil, err
-	} else {
-		responsetask := &pro.TaskResponse{
-			TaskId:  result.TaskId,
-			Title:   result.Title,
-			DueDate: result.DueDate,
-		}
-		return responsetask, nil
+		log.Printf("Error editing task: %v", err)
+		return nil, status.Error(codes.Internal, "Failed to edit task")
 	}
+	responsetask := &pro.TaskResponse{
+		TaskId:  result.TaskId,
+		Title:   result.Title,
+		DueDate: result.DueDate,
+	}
+	return responsetask, nil
 }
 
 func (s *RPCServer) DeleteTask(ctx context.Context, req *pro.TaskDelete) (*pro.Empty, error) {
 	if req == nil {
-		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
+		return nil, status.Error(codes.InvalidArgument, "Invalid request")
 	}
 	dbdelete := models.EditTaskDetails{
 		TaskId:     req.TaskId,
@@ -71,14 +72,15 @@ func (s *RPCServer) DeleteTask(ctx context.Context, req *pro.TaskDelete) (*pro.E
 	}
 	err := CustomerService.DeleteTask(&dbdelete)
 	if err != nil {
-		return nil, err
+		log.Printf("Error deleting task: %v", err)
+		return nil, status.Error(codes.Internal, "Failed to delete task")
 	}
 	return &pro.Empty{}, nil
 }
 
 func (s *RPCServer) GetTaskbyId(ctx context.Context, req *pro.TaskDelete) (*pro.TaskDetails, error) {
 	if req == nil {
-		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
+		return nil, status.Error(codes.InvalidArgument, "Invalid request")
 	}
 	dbgettaskbyid := models.EditTaskDetails{
 		TaskId:     req.TaskId,
@@ -86,37 +88,37 @@ func (s *RPCServer) GetTaskbyId(ctx context.Context, req *pro.TaskDelete) (*pro.
 	}
 	result, err := CustomerService.GetbyTaskId(&dbgettaskbyid)
 	if err != nil {
-		return nil, err
-	} else {
-		responsetask := &pro.TaskDetails{
-			TaskId:      result.TaskId,
-			CustomerId:  result.CustomerId,
-			Title:       result.Title,
-			Description: result.Description,
-			DueDate:     result.DueDate,
-			Priority:    result.Priority,
-			Category:    result.Category,
-			CreatedAt:   result.CreatedAt,
-			Completed:   result.Completed,
-		}
-		return responsetask, nil
+		log.Printf("Error getting task by ID: %v", err)
+		return nil, status.Error(codes.NotFound, "Task not found")
 	}
+	responsetask := &pro.TaskDetails{
+		TaskId:      result.TaskId,
+		CustomerId:  result.CustomerId,
+		Title:       result.Title,
+		Description: result.Description,
+		DueDate:     result.DueDate,
+		Priority:    result.Priority,
+		Category:    result.Category,
+		CreatedAt:   result.CreatedAt,
+		Completed:   result.Completed,
+	}
+	return responsetask, nil
 }
 
 func (s *RPCServer) GetTask(ctx context.Context, req *pro.TaskDelete) (*pro.GetTasksResponse, error) {
 	if req == nil {
-		return nil, status.Errorf(codes.InvalidArgument, "Invalid request")
+		return nil, status.Error(codes.InvalidArgument, "Invalid request")
 	}
 	dbgettask := models.EditTaskDetails{
 		CustomerId: req.CustomerId,
 	}
 	tasks, err := CustomerService.GetTask(&dbgettask)
 	if err != nil {
-		return nil, err
+		log.Printf("Error getting tasks: %v", err)
+		return nil, status.Error(codes.Internal, "Failed to get tasks")
 	}
 	var taskDetails []*pro.TaskDetails
 	for _, task := range tasks {
-		// Create a TaskDetails message for each task in the slice
 		taskDetail := &pro.TaskDetails{
 			TaskId:      task.TaskId,
 			CustomerId:  task.CustomerId,
@@ -128,13 +130,11 @@ func (s *RPCServer) GetTask(ctx context.Context, req *pro.TaskDelete) (*pro.GetT
 			CreatedAt:   task.CreatedAt,
 			Completed:   task.Completed,
 		}
-
 		taskDetails = append(taskDetails, taskDetail)
 	}
 
 	response := &pro.GetTasksResponse{
 		Tasks: taskDetails,
 	}
-
 	return response, nil
 }

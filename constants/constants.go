@@ -1,8 +1,8 @@
 package constants
 
-const ConnectionString = "mongodb+srv://mrnithisht:mrnithisht@nithi1.ufjvb6g.mongodb.net/"
+var ConnectionString = "mongodb+srv://mrnithisht:mrnithisht@nithi1.ufjvb6g.mongodb.net/"
 const Port = ":5000"
-const SecretKey = "GoTask-By-Nithi"
-const AccountSID = "AC8de01cb2d2ff11485290c6e0a1686136"
-const AuthToken = "450f1b6b62db7b6ad4cdbc1a68632cc1"
-const PhoneNumber = "+14692086690"
+var SecretKey = "GoTask-By-Nithi"
+var AccountSID = "AC8de01cb2d2ff11485290c6e0a1686136"
+var AuthToken = "450f1b6b62db7b6ad4cdbc1a68632cc1"
+var PhoneNumber = "+14692086690"

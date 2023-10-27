@@ -1,22 +1,3 @@
-// package grpc
-
-// import (
-// 	pb "github.com/NithishNithi/GoShop/proto"
-// 	"google.golang.org/grpc"
-// )
-
-// func NewGoShopClient() (pb.GoShopServiceClient, *grpc.ClientConn, error) {
-// 	// Set up a connection to the gRPC server
-// 	conn, err := grpc.Dial("localhost:5000", grpc.WithInsecure())
-// 	if err != nil {
-// 		return nil, nil, err
-// 	}
-
-// 	// Create a gRPC client
-// 	client := pb.NewGoShopServiceClient(conn)
-
-// 	return client, conn, nil
-// }
 
 package grpcclient
 
@@ -36,7 +17,7 @@ var (
 	instance GrpcClient
 )
 
-func GetGrpcClientInstance() (GrpcClient,*grpc.ClientConn) {
+func GetGrpcClientInstance() (GrpcClient, *grpc.ClientConn) {
 	var conn *grpc.ClientConn
 	once.Do(func() { // <-- atomic, does not allow repeating
 		conn, err := grpc.Dial("localhost:5000", grpc.WithInsecure())
@@ -48,6 +29,5 @@ func GetGrpcClientInstance() (GrpcClient,*grpc.ClientConn) {
 		instance = pb.NewGoTaskServiceClient(conn)
 	})
 
-	return instance,conn
+	return instance, conn
 }
-

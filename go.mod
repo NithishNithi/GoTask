@@ -4,9 +4,8 @@ go 1.18
 
 require (
 	github.com/gin-gonic/gin v1.9.1
-	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/golang-jwt/jwt/v5 v5.0.0
-	github.com/jung-kurt/gofpdf v1.16.2
+	github.com/joho/godotenv v1.5.1
 	github.com/twilio/twilio-go v1.14.0
 	go.mongodb.org/mongo-driver v1.12.1
 	google.golang.org/grpc v1.58.1
@@ -48,6 +47,5 @@ require (
 	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230913181813-007df8e322eb // indirect
-	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
