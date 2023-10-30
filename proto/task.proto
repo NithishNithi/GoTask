@@ -42,6 +42,8 @@ message CustomerDetails {
 }
 
 
+
+
 message CustomerResponse {
     string CustomerId = 1;
     bool Success = 2;
