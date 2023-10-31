@@ -1,5 +1,0 @@
-{
-    "version": 2,
-    "builds": [{ "src": "/home/nithish/go/src/GoTask", "use": "@vercel/go" }]
-  }
-  

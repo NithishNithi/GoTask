@@ -34,3 +34,9 @@ type Token struct {
 type TokenResponse struct {
 	Token string `json:"token" bson:"token"`
 }
+
+type CreateCustomerResponse struct {
+	CustomerId string `json:"customerid" bson:"customerid"`
+	Message    string `json:"message"`
+	Status     bool   `json:"status"`
+}

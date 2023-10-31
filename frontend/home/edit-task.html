@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .edit-container {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Edit Task</h1>
+
+    <div class="edit-container">
+        <label for="task-id">Task Id:</label>
+        <input type="text" id="task-id" name="task-id">
+        <label for="edit-field">Select Field to Edit:</label>
+        <select id="edit-field" name="edit-field">
+            <option value="title">Title</option>
+            <option value="description">Description</option>
+            <option value="duedate">Due Date</option>
+            <option value="category">Category</option>
+        </select>
+
+        <label for="new-value">New Value:</label>
+        <input type="text" id="new-value" name="new-value">
+
+        <button id="edit-task-btn">Edit Task</button>
+    </div>
+
+    <script>
+        document.getElementById('edit-task-btn').addEventListener('click', async function () {
+            const tokenDataString = sessionStorage.getItem('token');
+            const tokenData = JSON.parse(tokenDataString);
+            const taskid =  document.getElementById('task-id').value;
+            const editField = document.getElementById('edit-field').value;
+            const newValue = document.getElementById('new-value').value;
+
+            if (editField && newValue) {
+                try {
+                    const data = {
+                        token :tokenData.token,
+                        taskid:taskid,
+                        field: editField,
+                        value: newValue
+                    };
+
+                    const response = await fetch('/tasks/edittask', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (response.ok) {
+                        console.log('Task edited successfully.');
+                    } else {
+                        console.error('Error editing task:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error editing task:', error);
+                }
+            } else {
+                console.error('Invalid input. Please provide valid values.');
+            }
+        });
+    </script>
+</body>
+
+</html>

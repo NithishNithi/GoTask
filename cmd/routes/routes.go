@@ -22,9 +22,9 @@ func SetUpRoutes(r *gin.Engine) {
 	task := r.Group("/tasks")
 	{
 		task.POST("/createtask", handlers.CreateTask)
-		task.POST("/edittask/:taskid", handlers.EditTask)
-		task.GET("/deletetask/:taskid", handlers.DeleteTask)
-		task.GET("/gettaskbyid/:taskid", handlers.GetbyTaskId)
+		task.POST("/edittask", handlers.EditTask)
+		task.POST("/deletetask", handlers.DeleteTask)
+		task.POST("/gettaskbyid", handlers.GetbyTaskId)
 		task.POST("/gettask", handlers.GetTask)
 	}
 }

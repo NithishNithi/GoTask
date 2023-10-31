@@ -4,10 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	grpcclient "github.com/NithishNithi/GoTask/cmd/grpc"
 	"github.com/NithishNithi/GoTask/constants"
+	"github.com/NithishNithi/GoTask/controllers"
 	"github.com/NithishNithi/GoTask/models"
-	pb "github.com/NithishNithi/GoTask/proto"
 	"github.com/NithishNithi/GoTask/services"
 	"github.com/gin-gonic/gin"
 )
@@ -30,9 +29,9 @@ func CreateTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
 		return
 	}
-
-	Client, _ := grpcclient.GetGrpcClientInstance()
-	response, err := Client.CreateTask(c.Request.Context(), &pb.TaskDetails{TaskId: request.TaskId, CustomerId: Customerid, Title: request.Title, Description: request.Description, DueDate: request.DueDate, Priority: request.Priority, Category: request.Category, CreatedAt: request.CreatedAt, Completed: request.Completed})
+	request.CustomerId = Customerid
+	// Client, _ := grpcclient.GetGrpcClientInstance()
+	response, err := controllers.CreateTask(*request)
 	if err != nil {
 		log.Printf("Error creating task: %v\n", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create task"})
@@ -42,27 +41,33 @@ func CreateTask(c *gin.Context) {
 }
 
 func EditTask(c *gin.Context) {
-	taskid := c.Param("taskid")
-	token := c.GetHeader("Authorization")
-	if token == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
-		return
-	}
-	Customerid, err := services.ExtractCustomerID(token, constants.SecretKey)
-	if err != nil {
-		log.Printf("Error extracting CustomerID: %v\n", err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
-		return
-	}
-	var request *models.EditTaskDetails
+	var request *models.EditTask
 	if err := c.ShouldBindJSON(&request); err != nil {
 		log.Printf("Error binding JSON: %v\n", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
 		return
 	}
+	token := request.Token
+	if token == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
+		return
+	}
 
-	Client, _ := grpcclient.GetGrpcClientInstance()
-	response, err := Client.EditTask(c.Request.Context(), &pb.EditTaskDetails{CustomerId: Customerid, TaskId: taskid, Field: request.Field, Value: request.Value})
+	customerid, err := services.ExtractCustomerID(token, constants.SecretKey)
+	if err != nil {
+		log.Printf("Error extracting CustomerID: %v\n", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
+		return
+	}
+	task := &models.EditTaskDetails{
+		TaskId:     request.TaskId,
+		CustomerId: customerid,
+		Field:      request.Field,
+		Value:      request.Value,
+	}
+
+	// Client, _ := grpcclient.GetGrpcClientInstance()
+	response, err := controllers.EditTask(task)
 	if err != nil {
 		log.Printf("Error editing task: %v\n", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit task"})
@@ -72,8 +77,13 @@ func EditTask(c *gin.Context) {
 }
 
 func DeleteTask(c *gin.Context) {
-	taskid := c.Param("taskid")
-	token := c.GetHeader("Authorization")
+	var request *models.Task1
+	if err := c.ShouldBindJSON(&request); err != nil {
+		log.Printf("Error binding JSON: %v\n", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
+		return
+	}
+	token := request.Token
 	if token == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
 		return
@@ -84,8 +94,8 @@ func DeleteTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
 		return
 	}
-	Client, _ := grpcclient.GetGrpcClientInstance()
-	_, err = Client.DeleteTask(c.Request.Context(), &pb.TaskDelete{TaskId: taskid, CustomerId: customerid})
+	// Client, _ := grpcclient.GetGrpcClientInstance()
+	err = controllers.DeleteTask(request.TaskId, customerid)
 	if err != nil {
 		log.Printf("Error deleting task: %v\n", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete task"})
@@ -96,8 +106,13 @@ func DeleteTask(c *gin.Context) {
 }
 
 func GetbyTaskId(c *gin.Context) {
-	taskid := c.Param("taskid")
-	token := c.GetHeader("Authorization")
+	var request *models.Task1
+	if err := c.ShouldBindJSON(&request); err != nil {
+		log.Printf("Error binding JSON: %v\n", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
+		return
+	}
+	token := request.Token
 	if token == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Token not found"})
 		return
@@ -108,8 +123,8 @@ func GetbyTaskId(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
 		return
 	}
-	Client, _ := grpcclient.GetGrpcClientInstance()
-	response, err := Client.GetTaskbyId(c.Request.Context(), &pb.TaskDelete{TaskId: taskid, CustomerId: customerid})
+	// Client, _ := grpcclient.GetGrpcClientInstance()
+	response, err := controllers.GetTaskbyId(request.TaskId, customerid)
 	if err != nil {
 		log.Printf("Error getting task by ID: %v\n", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Task not found"})
@@ -136,8 +151,8 @@ func GetTask(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid Token"})
 		return
 	}
-	Client, _ := grpcclient.GetGrpcClientInstance()
-	response, err := Client.GetTask(c.Request.Context(), &pb.TaskDelete{CustomerId: customerid})
+	// Client, _ := grpcclient.GetGrpcClientInstance()
+	response, err := controllers.GetTask(customerid)
 	if err != nil {
 		log.Printf("Error getting task: %v\n", err)
 		c.JSON(http.StatusNotFound, gin.H{"error": "Tasks not found"})

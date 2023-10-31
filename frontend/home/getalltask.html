@@ -49,7 +49,6 @@
 <body>
     <h1>All Task Details</h1>
 
-
     <center>
         <div class="product-container" id="product-container">
             <!-- Task items will be dynamically added here -->
@@ -57,16 +56,14 @@
     </center>
 
     <script>
+        // Assuming you've set up sessionStorage correctly
         const tokenDataString = sessionStorage.getItem('token');
         const tokenData = JSON.parse(tokenDataString);
-        //console.log(tokenData.token);
         const productContainer = document.getElementById('product-container');
 
         async function fetchAndDisplayTasks(token) {
             try {
-                const data = {
-                    token: token
-                };
+                const data = { token };
                 const response = await fetch('/tasks/gettask', {
                     method: 'POST',
                     headers: {
@@ -74,34 +71,81 @@
                     },
                     body: JSON.stringify(data)
                 });
-                const responseJson = await response.json();
-                const tasks = responseJson.message.Tasks;
 
-                tasks.forEach(task => {
-                    const taskCard = document.createElement('div');
-                    taskCard.classList.add('product');
+                if (response.ok) {
+                    const { message } = await response.json();
+                    console.log('Response JSON:', message); // Log the response for debugging
 
-                    taskCard.innerHTML = `
-                <h2>${task.Title}</h2>
-                <h3>TaskId:${task.TaskId}</h3>
-                <p>Description: ${task.Description}</p>
-                <p>Due Date: ${task.DueDate}</p>
-                <p>Priority: ${task.Priority}</p>
-                <p>Category: ${task.Category}</p>
-                <p>Created At: ${task.CreatedAt}</p>
-                <p>Completed: ${task.Completed ? 'Yes' : 'No'}</p>
-            `;
-                    productContainer.appendChild(taskCard);
-                });
+                    message.forEach(task => {
+                        const taskCard = document.createElement('div');
+                        taskCard.classList.add('product');
+
+                        taskCard.innerHTML = `
+                            <h2>${task.title}</h2>
+                            <h3>TaskId: ${task.taskid}</h3>
+                            <p>Description: ${task.description}</p>
+                            <p>Due Date: ${task.duedate}</p>
+                            <p>Priority: ${task.priority}</p>
+                            <p>Category: ${task.category}</p>
+                            <p>Created At: ${task.createdat}</p>
+                            <p>Completed: ${task.completed ? 'Yes' : 'No'}</p>
+                            <button class="delete-task" data-taskid="${task.taskid}">Delete</button>
+                        `;
+
+                        productContainer.appendChild(taskCard);
+                    });
+
+                    // Attach event listeners for delete buttons
+                    attachDeleteListeners();
+                } else {
+                    console.error('Error fetching tasks:', response.statusText);
+                }
 
             } catch (error) {
                 console.error('Error fetching tasks:', error);
             }
         }
 
+        // Function to attach event listeners to delete buttons
+        function attachDeleteListeners() {
+            const deleteButtons = document.querySelectorAll('.delete-task');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', async function () {
+                    const taskId = button.getAttribute('data-taskid');
+                    await deleteTask(taskId);
+                    // Remove the task card from the display
+                    button.parentNode.remove();
+                });
+            });
+        }
+
+        // Function to handle task deletion
+        async function deleteTask(taskId) {
+            try {
+                const data = {
+                    token: tokenData.token,
+                    taskid: taskId
+                };
+                const response = await fetch(`/tasks/deletetask`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    console.log(`Task ${taskId} deleted successfully.`);
+                } else {
+                    console.error('Error deleting task:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error deleting task:', error);
+            }
+        }
+
+        // Fetch and display tasks when the page loads
         fetchAndDisplayTasks(tokenData.token);
-
-
     </script>
 </body>
 

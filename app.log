@@ -1,0 +1,112 @@
+[GoTask] 2023/10/30 18:37:31 listen tcp: address 8080: missing port in address
+[GoTask] 2023/10/31 17:32:06 Error creating customer: A customer with the same customerId or email already exists
+[GoTask] 2023/10/31 17:32:06 Error creating customer: A customer with the same customerId or email already exists
+[GoTask] 2023/10/31 17:32:11 Error creating customer: A customer with the same customerId or email already exists
+[GoTask] 2023/10/31 17:32:11 Error creating customer: A customer with the same customerId or email already exists
+[GoTask] 2023/10/31 17:40:02 Attempt 1: Error sending SMS message: Status: 401 - ApiError 20003: Authentication Error - No password provided (null) More info: https://www.twilio.com/docs/errors/20003
+[GoTask] 2023/10/31 18:20:02 Attempt 1: Error sending SMS message: Status: 401 - ApiError 20003: Authentication Error - No password provided (null) More info: https://www.twilio.com/docs/errors/20003
+[GoTask] 2023/10/31 18:24:54 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:24:54 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:24:54 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:24:54 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:24:54 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:24:54 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:24:54 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:24:54 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:24:54 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:26:56 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:26:56 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:26:56 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:32:35 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:32:35 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:32:35 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:35:12 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:35:12 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:35:12 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:35:30 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:35:30 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:35:30 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:35:30 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:35:30 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:35:30 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:35:56 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:35:56 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:35:56 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:39:00 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:00 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:00 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:39:04 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:04 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:04 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:39:09 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:09 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:09 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:39:09 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:09 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:09 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:39:10 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:10 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:10 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:39:17 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:17 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:39:17 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:41:13 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:41:13 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:41:13 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:45:34 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:45:35 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:45:36 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:46:24 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:46:27 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:46:28 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:46:28 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:46:32 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:47:24 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:47:25 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:47:25 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:54:32 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:54:38 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:54:40 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:54:41 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:54:41 Error extracting CustomerID: token has invalid claims: token is expired
+[GoTask] 2023/10/31 18:55:02 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:55:02 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:55:02 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:55:10 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:55:10 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:55:10 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:56:14 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:56:14 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:56:14 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:58:56 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:58:56 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:58:56 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:59:00 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:00 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:00 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:59:03 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:03 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:03 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:59:06 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:06 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:06 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:59:11 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:11 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:11 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 18:59:14 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:14 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 18:59:14 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 19:00:11 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 19:00:11 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 19:00:11 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 19:00:11 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 19:00:11 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 19:00:11 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 19:00:12 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 19:00:12 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 19:00:12 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 19:00:13 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 19:00:13 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/10/31 19:00:13 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/10/31 19:22:13 Attempt 1: Error sending SMS message: Status: 401 - ApiError 20003: Authentication Error - No password provided (null) More info: https://www.twilio.com/docs/errors/20003
+[GoTask] 2023/10/31 19:22:46 Attempt 1: Error sending SMS message: Status: 401 - ApiError 20003: Authentication Error - No password provided (null) More info: https://www.twilio.com/docs/errors/20003
