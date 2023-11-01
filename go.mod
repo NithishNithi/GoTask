@@ -8,7 +8,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/twilio/twilio-go v1.14.0
 	go.mongodb.org/mongo-driver v1.12.1
-	google.golang.org/grpc v1.58.1
+	google.golang.org/grpc v1.58.3
 	google.golang.org/protobuf v1.31.0
 )
 
