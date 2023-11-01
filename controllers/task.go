@@ -35,7 +35,7 @@ func CreateTask(req models.Task1) (*pro.TaskResponse, error) {
 	return responsetask, nil
 }
 
-func (s *RPCServer) EditTask(req *models.EditTaskDetails) (*pro.TaskResponse, error) {
+func EditTask(req *models.EditTaskDetails) error {
 
 	dbtask := models.EditTaskDetails{
 		TaskId:     req.TaskId,
@@ -43,17 +43,13 @@ func (s *RPCServer) EditTask(req *models.EditTaskDetails) (*pro.TaskResponse, er
 		Field:      req.Field,
 		Value:      req.Value,
 	}
-	result, err := CustomerService.EditTask(&dbtask)
+	_, err := CustomerService.EditTask(&dbtask)
 	if err != nil {
 		log.Printf("Error editing task: %v", err)
-		return nil, status.Error(codes.Internal, "Failed to edit task")
+		return status.Error(codes.Internal, "Failed to edit task")
 	}
-	responsetask := &pro.TaskResponse{
-		TaskId:  result.TaskId,
-		Title:   result.Title,
-		DueDate: result.DueDate,
-	}
-	return responsetask, nil
+
+	return nil
 }
 
 func DeleteTask(taskid, customerid string) error {

@@ -102,9 +102,12 @@
                     });
 
                     if (response.ok) {
+                        alert("Update Success")
                         console.log('Task edited successfully.');
+                        window.location.href = '/home';
                     } else {
                         console.error('Error editing task:', response.statusText);
+                        alert('Error editing task:', response.statusText)
                     }
                 } catch (error) {
                     console.error('Error editing task:', error);

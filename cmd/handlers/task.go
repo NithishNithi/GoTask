@@ -67,13 +67,13 @@ func EditTask(c *gin.Context) {
 	}
 
 	// Client, _ := grpcclient.GetGrpcClientInstance()
-	response, err := controllers.EditTask(task)
+	err = controllers.EditTask(task)
 	if err != nil {
 		log.Printf("Error editing task: %v\n", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to edit task"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": response})
+	c.JSON(http.StatusOK, gin.H{"message": "Updated"})
 }
 
 func DeleteTask(c *gin.Context) {
