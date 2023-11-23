@@ -36,7 +36,5 @@ type TokenResponse struct {
 }
 
 type CreateCustomerResponse struct {
-	CustomerId string `json:"customerid" bson:"customerid"`
 	Message    string `json:"message"`
-	Status     bool   `json:"status"`
 }

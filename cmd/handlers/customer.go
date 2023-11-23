@@ -3,7 +3,7 @@ package handlers
 import (
 	"log"
 	"net/http"
-
+	"fmt"
 	"github.com/NithishNithi/GoTask/controllers"
 	"github.com/NithishNithi/GoTask/models"
 	"github.com/NithishNithi/GoTask/services"
@@ -20,6 +20,7 @@ func CreateCustomer(c *gin.Context) {
 	}
 	// Client, _ := grpcclient.GetGrpcClientInstance()
 	response, err1 := controllers.CreateCustomer(&request)
+	fmt.Print(response)
 	if err1 != nil {
 		// Log the error but continue processing
 		log.Println("Error creating customer:", err1)

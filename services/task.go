@@ -191,7 +191,7 @@ func TaskReminderSMSNotification(task models.Task, customer *models.Customer) {
 	authToken := constants.AuthToken
 	to := customer.PhoneNumber
 	from := constants.PhoneNumber
-	message := "Task ID: " + task.TaskId + ": " + task.Title + ", About: " + task.Description + " has been Completed. This is your Reminder Message from our Team"
+	message := "Task ID: " + task.TaskId + ": " + task.Title + ", About: " + task.Description + ". This is your Reminder Message from our Team - Go Task Sheduler"
 
 	client := twilio.NewRestClientWithParams(twilio.ClientParams{
 		Username: accountSid,

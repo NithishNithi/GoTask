@@ -20,15 +20,13 @@ func CreateCustomer(req *models.Customer) (*models.CreateCustomerResponse, error
 		Zip:         req.Zip,
 	}
 
-	result, err := CustomerService.CreateCustomer(&dbCustomer)
+	_, err := CustomerService.CreateCustomer(&dbCustomer)
 	if err != nil {
 		log.Printf("Error creating customer: %v", err)
 		return nil, err
 	}
 
 	responseCustomer := models.CreateCustomerResponse{
-		CustomerId: result.CustomerId,
-		Status:     true,
 		Message:    "Welcome to GoTask Scheduler, Your Account has Been Created",
 	}
 	return &responseCustomer, nil

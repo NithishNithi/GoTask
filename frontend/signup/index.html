@@ -8,147 +8,213 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="icon" href="icon.jpeg">
   <style>
-    /* Additional custom styles */
-    body {
-      background-image: url('background.jpg');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-position: center;
-      font-family: Arial, sans-serif;
+    *,
+    *:before,
+    *:after {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
     }
 
+    body {
+      background-color: #080710;
+    }
 
+    .background {
+      width: 430px;
+      height: 520px;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      top: 50%;
+    }
+
+    .background .shape {
+      height: 200px;
+      width: 200px;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .shape:first-child {
+      background: linear-gradient(#1845ad,
+          #23a2f6);
+      left: -80px;
+      top: -80px;
+    }
+
+    .shape:last-child {
+      background: linear-gradient(to right,
+          #ff512f,
+          #f09819);
+      right: -30px;
+      bottom: -80px;
+    }
 
     form {
-      max-width: 500px;
+      width: 400px;
       margin: 0 auto;
-      background-color: rgba(255, 255, 255, 0.5);
-      padding: 40px;
+      background-color: rgba(255, 255, 255, 0.13);
+      position: absolute;
+      transform: translate(-50%, 0);
+      top: 100px;      
+      left: 50%;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
+      padding: 50px 35px;
     }
 
-    h1 {
-      max-width: 500px;
-      margin: 0 auto;
-      background-color: rgba(255, 255, 255, 0.5);
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      color: #f61b1b;
-      margin-bottom: 30px;
-    }
 
-    button[type="submit"] {
-      background-color: #9c314f;
-      color: #fff;
+
+    form * {
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      outline: none;
       border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      font-size: 18px;
-      border-radius: 4px;
-      width: 100%;
-      margin-top: 20px;
     }
 
-    button[type="submit"]:hover {
-      background-color: #403e3e;
-    }
-
-    .form-group label {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .form-group input {
-      background-color: rgba(255, 255, 255, 0.5);
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 4px;
-      width: 100%;
-    }
-
-    .form-group small {
-      color: red;
-    }
-
-    .text-center {
+    form h3 {
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 42px;
       text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 30px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    input {
+      display: block;
+      height: 50px;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.07);
+      border-radius: 3px;
+      padding: 0 10px;
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    ::placeholder {
+      color: #e5e5e5;
+    }
+
+    button {
+      margin-top: 50px;
+      width: 100%;
+      background-color: #ffffff;
+      color: #080710;
+      padding: 15px 0;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .social {
+      margin-top: 30px;
+      display: flex;
+    }
+
+    .social div {
+      background: red;
+      width: 150px;
+      border-radius: 3px;
+      padding: 5px 10px 10px 5px;
+      background-color: rgba(255, 255, 255, 0.27);
+      color: #eaf0fb;
+      text-align: center;
+    }
+
+    .social div:hover {
+      background-color: rgba(255, 255, 255, 0.47);
+    }
+
+    .social .fb {
+      margin-left: 25px;
+    }
+
+    .social i {
+      margin-right: 4px;
     }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <br>
-    <h1 style="color: #fff; font-weight: bolder;">Create Customer</h1>
-    <form id="customerForm">
-
-      <div class="form-group">
-        <label for="fullname">Full Name:</label>
-        <input type="text" id="fullname" name="fullname" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="dateofbirth">Date of Birth:</label>
-        <input type="date" id="dateofbirth" name="dateofbirth" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="phonenumber">Phone Number:</label>
-        <input type="tel" id="phonenumber" name="phonenumber" class="form-control" required>
-      </div>
-
-
-      <div class="form-group">
-        <label for="houseno">House No:</label>
-        <input type="text" id="houseno" name="houseno" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="street">Street Name:</label>
-        <input type="text" id="street" name="street" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="city">City:</label>
-        <input type="text" id="city" name="city" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" class="form-control" required>
-      </div>
-
-      <div class="form-group">
-        <label for="zip">Zip Code:</label>
-        <input type="text" id="zip" name="zip" class="form-control" required>
-      </div>
-
-      <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary">Create Profile</button>
-      </div>
-
-    </form>
+  <div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
   </div>
+
+  <form id="customerForm">
+    <h3>Create Customer</h3>
+
+    <div class="form-group">
+      <label for="fullname">Full Name:</label>
+      <input type="text" id="fullname" name="fullname" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="dateofbirth">Date of Birth:</label>
+      <input type="date" id="dateofbirth" name="dateofbirth" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="phonenumber">Phone Number:</label>
+      <input type="tel" id="phonenumber" name="phonenumber" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="houseno">House No:</label>
+      <input type="text" id="houseno" name="houseno" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="street">Street Name:</label>
+      <input type="text" id="street" name="street" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="state">State:</label>
+      <input type="text" id="state" name="state" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="country">Country:</label>
+      <input type="text" id="country" name="country" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="zip">Zip Code:</label>
+      <input type="text" id="zip" name="zip" class="form-control" required>
+    </div>
+
+    <div class="form-group text-center">
+      <button type="submit" class="btn btn-primary">Create Profile</button>
+    </div>
+  </form>
 
   <!-- Add the required Bootstrap JavaScript and jQuery -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -186,9 +252,9 @@
       })
         .then(response => response.json())
         .then(data => {
-          console.log("Response received:", data);
+          console.log("Response received:", data.value);
           if (data && data.value) {
-            alert(data.value.Message);
+            alert(data.value.message);
           } else {
             alert("Failed: " + data.error);
           }
