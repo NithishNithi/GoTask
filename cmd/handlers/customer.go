@@ -34,7 +34,6 @@ func LoginCustomer(c *gin.Context) {
 	var request *models.Login
 	err := c.ShouldBindJSON(&request)
 	if err != nil {
-		// Log the error but continue processing
 		log.Println("Error binding JSON:", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON data"})
 		return
@@ -43,21 +42,20 @@ func LoginCustomer(c *gin.Context) {
 	if status {
 		token, err := services.CreateToken(request.Email, ans.CustomerId)
 		if err != nil {
-			// Log the error but continue processing
 			log.Println("Error creating token:", err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 			return
 		}
-		// Client, _ := grpcclient.GetGrpcClientInstance()
 		response, err1 := controllers.InsertToken(request.CustomerId, request.Email, token)
 		if err1 != nil {
-			// Log the error but continue processing
 			log.Println("Error inserting token:", err1)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal server error"})
 			return
 		}
 		c.JSON(http.StatusOK, gin.H{"token": response.Token})
 	} else {
+		// Include an error status in the response
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 	}
 }
+

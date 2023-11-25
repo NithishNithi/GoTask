@@ -3,15 +3,47 @@
 
 <head>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+         body {
+            font-family: 'Open Sans', sans-serif;
             padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
         }
 
         h1 {
             text-align: center;
-            color: #000000;
+            color: #007BFF;
             margin-bottom: 20px;
+        }
+
+        form {
+            text-align: center;
+        }
+
+        label {
+            font-size: 1.2rem;
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #007BFF;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
         }
 
         .product-container {
@@ -26,7 +58,7 @@
             padding: 20px;
             margin: 10px;
             border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 400px;
             display: flex;
             flex-direction: column;
@@ -38,7 +70,7 @@
         }
 
         .product h2 {
-            color: #333;
+            color: #007BFF;
             font-size: 1.5rem;
             margin-bottom: 10px;
             text-transform: uppercase;
@@ -58,7 +90,6 @@
         <input type="submit" value="Get Task by ID"
             style="background-color: #007BFF; color: #fff; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
     </form>
-
 
     <div class="product-container" id="product-container">
         <!-- Task items will be dynamically added here -->
@@ -110,22 +141,43 @@
                     } else {
                         // Show a message to indicate that the task was not found
                         const notFoundMessage = document.createElement('p');
-                        notFoundMessage.textContent = 'Task not found';
+                        notFoundMessage.textContent = 'No document found with the provided Task ID';
                         notFoundMessage.style.color = 'red';
                         productContainer.appendChild(notFoundMessage);
                     }
                 } else {
-                    console.error('Error fetching task by ID:', response.statusText);
+                    const errorResponse = await response.json(); // Parse the error response
+                    console.error('Error fetching task by ID:', errorResponse);
+
+                    // Show an error message
+                    if (errorResponse.error) {
+                        const errorMessage = document.createElement('p');
+                        errorMessage.textContent = `Error: ${errorResponse.error}`;
+                        errorMessage.style.color = 'red';
+                        productContainer.appendChild(errorMessage);
+                    } else {
+                        const errorMessage = document.createElement('p');
+                        errorMessage.textContent = 'Error fetching task. Please try again later.';
+                        errorMessage.style.color = 'red';
+                        productContainer.appendChild(errorMessage);
+                    }
                 }
             } catch (error) {
+                // Handle any other errors that might occur
                 console.error('Error fetching task by ID:', error);
+
+                // Show an error message
+                const errorMessage = document.createElement('p');
+                errorMessage.textContent = 'Error fetching task. Please try again later.';
+                errorMessage.style.color = 'red';
+                productContainer.appendChild(errorMessage);
             }
         }
 
         // Call the initial fetchAndDisplayTasks function
-        fetchAndDisplayTasks();
-    </script>
+        // fetchAndDisplayTasks(); // Commented out to prevent initial error message
 
+    </script>
 </body>
 
 </html>

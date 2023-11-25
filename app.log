@@ -7,3 +7,36 @@
 [GoTask] 2023/11/23 15:58:31 Error fetching task by ID: mongo: no documents in result
 [GoTask] 2023/11/23 15:58:31 Error getting task by ID: mongo: no documents in result
 [GoTask] 2023/11/23 15:58:31 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/11/25 10:36:28 Failed to connect to the database: server selection error: context deadline exceeded, current topology: { Type: ReplicaSetNoPrimary, Servers: [{ Addr: ac-4o3jowo-shard-00-00.ufjvb6g.mongodb.net:27017, Type: Unknown, Last error: dial tcp 34.93.80.164:27017: i/o timeout }, { Addr: ac-4o3jowo-shard-00-01.ufjvb6g.mongodb.net:27017, Type: Unknown, Last error: dial tcp 34.93.17.40:27017: i/o timeout }, { Addr: ac-4o3jowo-shard-00-02.ufjvb6g.mongodb.net:27017, Type: Unknown, Last error: dial tcp 34.93.230.157:27017: i/o timeout }, ] }
+[GoTask] 2023/11/25 10:42:53 Error fetching user: mongo: no documents in result
+[GoTask] 2023/11/25 10:45:13 Error fetching user: mongo: no documents in result
+[GoTask] 2023/11/25 10:47:05 Error fetching user: mongo: no documents in result
+[GoTask] 2023/11/25 10:47:34 Error fetching user: mongo: no documents in result
+[GoTask] 2023/11/25 10:59:29 Error fetching user: mongo: no documents in result
+[GoTask] 2023/11/25 11:00:56 Error fetching user: mongo: no documents in result
+[GoTask] 2023/11/25 11:02:08 Error fetching user: mongo: no documents in result
+[GoTask] 2023/11/25 11:02:44 Invalid password
+[GoTask] 2023/11/25 11:04:09 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:04:09 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:04:09 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/11/25 11:09:21 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:21 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:21 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/11/25 11:09:25 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:25 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:25 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/11/25 11:09:27 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:27 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:27 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/11/25 11:09:27 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:27 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:27 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/11/25 11:09:27 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:27 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:27 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/11/25 11:09:28 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:28 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:28 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2023/11/25 11:09:28 Error fetching task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:28 Error getting task by ID: mongo: no documents in result
+[GoTask] 2023/11/25 11:09:28 Error getting task by ID: rpc error: code = NotFound desc = Task not found

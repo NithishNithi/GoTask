@@ -197,7 +197,7 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log("Response received:", data);
-                    if (data) {
+                    if (data.token) {
                         alert("LogIn Success");
                         const tokenDataString = JSON.stringify(data);
                         sessionStorage.setItem('token', tokenDataString);
