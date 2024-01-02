@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gantt Chart</title>
+    <link rel="stylesheet" href="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #gantt_here {
+            width: 80%;
+            height: 80vh;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            border-radius: 10px;
+        }
+    </style>
+    <script src="https://cdn.dhtmlx.com/gantt/edge/dhtmlxgantt.js"></script>
+</head>
+
+<body>
+    <div id="gantt_here"></div>
+
+    <script>
+        const tokenDataString = sessionStorage.getItem('token');
+        const tokenData = JSON.parse(tokenDataString);
+        gantt.config.date_format = "%Y-%m-%d %H:%i:%s";
+        gantt.init("gantt_here");
+
+        // Function to fetch tasks from your Go backend
+        async function fetchTasks(token) {
+            try {
+                const data = { token };
+                const response = await fetch(`/tasks/gettask`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    const tasks = responseData.message;
+
+                    console.log('Response from backend:', responseData);
+
+                    if (tasks && tasks.length > 0) {
+                        const mappedTasks = tasks.map((task) => ({
+                            id: task.taskid,
+                            text: task.title,
+                            start_date: new Date(task.duedate), // Convert to Date object
+                            duration: 1,
+                            progress: task.completed ? 1 : 0,
+                        }));
+
+                        gantt.parse({ data: mappedTasks });
+                    } else {
+                        console.error('No tasks available.');
+                    }
+                } else {
+                    console.error('Error fetching tasks:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        }
+
+        // Fetch tasks when the page loads
+        window.addEventListener('load', () => {
+            const token = tokenData.token;
+            fetchTasks(token);
+        });
+    </script>
+</body>
+
+</html>

@@ -40,3 +40,6 @@
 [GoTask] 2023/11/25 11:09:28 Error fetching task by ID: mongo: no documents in result
 [GoTask] 2023/11/25 11:09:28 Error getting task by ID: mongo: no documents in result
 [GoTask] 2023/11/25 11:09:28 Error getting task by ID: rpc error: code = NotFound desc = Task not found
+[GoTask] 2024/01/02 13:11:53 Attempt 1: Error sending SMS message: Status: 401 - ApiError 20003: Authenticate (null) More info: https://www.twilio.com/docs/errors/20003
+[GoTask] 2024/01/02 13:29:48 Attempt 1: Error sending SMS message: Status: 401 - ApiError 20003: Authenticate (null) More info: https://www.twilio.com/docs/errors/20003
+[GoTask] 2024/01/02 13:30:01 Attempt 1: Error sending SMS message: Status: 401 - ApiError 20003: Authenticate (null) More info: https://www.twilio.com/docs/errors/20003
