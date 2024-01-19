@@ -23,10 +23,10 @@ func (p *CustomerService) CreateCustomer(user *models.Customer) (*models.Custome
 	}
 	existingCustomer := &models.Customer{}
 	err := p.CustomerCollection.FindOne(p.ctx, filter).Decode(existingCustomer)
-	if err == nil {
+	if err != nil && err != mongo.ErrNoDocuments {
+		return nil, errors.New("An error occurred while checking for existing customer")
+	} else if existingCustomer != nil {
 		return nil, errors.New("A customer with the same customerId or email already exists")
-	} else if err != mongo.ErrNoDocuments {
-		return nil, err
 	}
 
 	// Insert the new customer
