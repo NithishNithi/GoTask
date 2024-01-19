@@ -232,18 +232,7 @@
   <script src="https://apis.google.com/js/platform.js" async defer></script>
 
   <script>
-    // Your existing code here
-
-    function handleGoogleSignIn() {
-      const auth2 = gapi.auth2.getAuthInstance();
-      auth2.signIn().then(handleCredentialResponse);
-
-      // Set the flag to indicate that the signup button was clicked
-      localStorage.setItem("signupButtonClicked", "true");
-    }
-
-    document.getElementById("sign").addEventListener("click", handleGoogleSignIn);
-
+    let googleSignInTriggered = false;
     document.getElementById("customerForm").addEventListener("submit", function (event) {
       event.preventDefault();
 
@@ -287,6 +276,7 @@
     });
 
     function handleCredentialResponse(response) {
+      googleSignInTriggered = true;
       const responsePayload = decodeJwtResponse(response.credential);
       let UserDetails = {
         fullname: responsePayload.name,
@@ -298,23 +288,20 @@
         phoneNumber: responsePayload.phone_number || null,
       };
 
-      console.log(UserDetails.phoneNumber);
+      console.log(UserDetails.phoneNumber)
 
       let UserInfo = JSON.stringify(UserDetails);
       localStorage.setItem("UserDetails", UserInfo);
 
-      // Check if the signup button was clicked before automatically signing in
-      const signupButtonClicked = localStorage.getItem("signupButtonClicked");
-      console.log("signupButtonClicked",signupButtonClicked)
-
-      if (signupButtonClicked) {
-        // If the signup button was clicked, execute the Show_User_Data function
-        Show_User_Data();
-        // Reset the flag to prevent automatic sign-in on subsequent page loads
-        localStorage.removeItem("signupButtonClicked");
-      }
-
+      Show_User_Data();
     }
+
+    document.getElementById("sign").addEventListener("click", function () {
+    // Trigger Google Sign-In only if not already triggered
+    if (!googleSignInTriggered) {
+      document.getElementById("sign").click();
+    }
+  });
 
     function Show_User_Data() {
       if (localStorage.getItem("UserDetails")) {
@@ -356,10 +343,7 @@
       return JSON.parse(atob(tokens[1]));
     }
 
-    window.addEventListener("load", function () {
-      // Set a flag when the page loads to indicate that the signup button was not clicked
-      localStorage.removeItem("signupButtonClicked");
-    });
+    window.addEventListener("load", Show_User_Data);
   </script>
 </body>
 
