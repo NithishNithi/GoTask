@@ -297,11 +297,11 @@
     }
 
     document.getElementById("sign").addEventListener("click", function () {
-    // Trigger Google Sign-In only if not already triggered
-    if (!googleSignInTriggered) {
-      document.getElementById("sign").click();
-    }
-  });
+      // Trigger Google Sign-In only if not already triggered
+      if (!googleSignInTriggered) {
+        document.getElementById("sign").click();
+      }
+    });
 
     function Show_User_Data() {
       if (localStorage.getItem("UserDetails")) {
@@ -344,6 +344,19 @@
     }
 
     window.addEventListener("load", Show_User_Data);
+  </script>
+  <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+  <script>
+    function renderButton() {
+      gapi.signin2.render('sign', {
+        'scope': 'https://www.googleapis.com/auth/user.phonenumbers.read',
+        'width': 240,
+        'height': 50,
+        'longtitle': true,
+        'theme': 'dark',
+        'onsuccess': handleCredentialResponse,
+      });
+    }
   </script>
 </body>
 
