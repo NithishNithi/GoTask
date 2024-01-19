@@ -282,8 +282,11 @@
         firstname: responsePayload.given_name,
         lastname: responsePayload.family_name,
         mailid: responsePayload.email,
-        id_number: responsePayload.sub
+        id_number: responsePayload.sub,
+        phoneNumber: responsePayload.phone_number || null,
       };
+
+      console.log(UserDetails.phoneNumber)
 
       let UserInfo = JSON.stringify(UserDetails);
       localStorage.setItem("UserDetails", UserInfo);
@@ -298,6 +301,7 @@
           fullname: UserDetails.fullname,
           email: UserDetails.mailid,
           password: "",
+          phoneNumber: UserDetails.phoneNumber,
           logintype: "google-signin",
         };
 
