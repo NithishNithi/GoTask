@@ -12,6 +12,7 @@ type Customer struct {
 	City        string `json:"city" bson:"city"`
 	Country     string `json:"country" bson:"country"`
 	Zip         string `json:"zip" bson:"zip"`
+	LoginType   string `json:"logintype" bson:"logintype"`
 }
 
 type CustomerResponse struct {
@@ -36,5 +37,5 @@ type TokenResponse struct {
 }
 
 type CreateCustomerResponse struct {
-	Message    string `json:"message"`
+	Message string `json:"message"`
 }

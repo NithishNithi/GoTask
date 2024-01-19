@@ -11,7 +11,8 @@ import (
 	"github.com/NithishNithi/GoTask/database"
 	"github.com/NithishNithi/GoTask/services"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+
+	// "github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	// "google.golang.org/grpc/health"
 	// "google.golang.org/grpc/health/grpc_health_v1"
@@ -34,22 +35,19 @@ func main() {
 	log.SetOutput(logFile)
 	// Set a log prefix (optional)
 	log.SetPrefix("[GoTask] ")
-	// env --->
-	if err := godotenv.Load(); err != nil {
-		log.Printf("Error loading .env file: %v", err)
-		return
-	}
-	dbURL := os.Getenv("DB_URL")
-	secretKey := os.Getenv("SECRET_KEY")
-	accountSID := os.Getenv("ACCOUNT_SID")
-	authToken := os.Getenv("AUTH_TOKEN")
-	phoneNumber := os.Getenv("PHONE_NUMBER")
-	constants.ConnectionString = dbURL
-	constants.SecretKey = secretKey
-	constants.AccountSID = accountSID
-	constants.AuthToken = authToken
-	constants.PhoneNumber = phoneNumber
-	// Port := os.Getenv("PORT")
+
+	// env ---> required only for local
+	// if err := godotenv.Load(); err != nil {
+	// 	log.Printf("Error loading .env file: %v", err)
+	// 	return
+	// }
+
+	constants.ConnectionString = os.Getenv("DB_URL")
+	constants.SecretKey = os.Getenv("SECRET_KEY")
+	constants.AccountSID = os.Getenv("ACCOUNT_SID")
+	constants.AuthToken = os.Getenv("AUTH_TOKEN")
+	constants.PhoneNumber = os.Getenv("PHONE_NUMBER")
+	// Port := os.Getenv("PORT")  ----> grpc
 	// <----- env
 	mongoclient, err := database.ConnectDatabase()
 	if err != nil {
@@ -60,8 +58,13 @@ func main() {
 	initDatabase(mongoclient)
 	r := gin.Default()
 	routes.SetUpRoutes(r)
-	// fmt.Println("Listening on Port:",Port)
-	log.Fatal(r.Run(":8080"))
+
+	Port := os.Getenv("PORT")
+	if Port == "" {
+		Port = "8080"
+	}
+	log.Printf("Listening on Port: %v", Port)
+	log.Fatal(r.Run(":" + Port))
 
 	// grpc server declaration
 	// lis, err := net.Listen("tcp", constants.Port)
