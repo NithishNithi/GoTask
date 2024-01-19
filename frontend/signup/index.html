@@ -237,6 +237,9 @@
     function handleGoogleSignIn() {
       const auth2 = gapi.auth2.getAuthInstance();
       auth2.signIn().then(handleCredentialResponse);
+
+      // Set the flag to indicate that the signup button was clicked
+      localStorage.setItem("signupButtonClicked", "true");
     }
 
     document.getElementById("sign").addEventListener("click", handleGoogleSignIn);
@@ -353,9 +356,9 @@
     }
 
     window.addEventListener("load", function () {
-    // Set a flag when the page loads to indicate that the signup button was not clicked
-    localStorage.removeItem("signupButtonClicked");
-  });
+      // Set a flag when the page loads to indicate that the signup button was not clicked
+      localStorage.removeItem("signupButtonClicked");
+    });
   </script>
 </body>
 
